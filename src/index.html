@@ -7,8 +7,34 @@
   <link rel="stylesheet" href="assets/tailwindcss/styles.css" />
 </head>
 
-<body class="bg-gradient-to-r from-cyan-500 to-blue-500 text-center">
-  <button type="button" class="bg-white hover:bg-blue-700 text-blue-900 dark:text-white font-bold py-2 px-4 rounded-full">Login</button>
-</body>
+<body class="bg-black bg-light_mode_bg dark:bg-dark_mode_bg items-center justify-items-center">
+  <div class="h-10"></div>
+  <div class="justify-center text-center">
+    <h1 class="font-aileron text-[8vw] font-black text-white dark:text-purple-700">Untitled Chat App</h1>
+  </div>
 
+  <div>
+    <button type="button" class="
+    text-white 
+    bg-blue-700 
+    hover:bg-blue-800 
+    font-medium 
+    rounded-lg 
+    text-sm px-7 py-2.5 
+    text-center inline-flex items-center"> Sign Up</button>
+    <label for="default-toggle" class="inline-flex relative items-center cursor-pointer">
+      <input type="checkbox" id="default-toggle" class="sr-only peer">
+      <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
+      <span class="ml-3 text-sm font-medium text-gray-900 dark:text-gray-300">Dark Mode</span>
+    </label>
+  </div>
+  <script>
+    const html = document.querySelector("html");
+    const darkmode = document.querySelector("#default-toggle");
+    function toggleDarkMode() {
+      darkmode.checked ? html.classList.add('dark') : html.classList.remove('dark')
+    }
+    darkmode.addEventListener("click", toggleDarkMode);
+  </script>
+</body>
 </html>
