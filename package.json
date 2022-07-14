@@ -46,6 +46,7 @@
   },
   "dependencies": {
     "electron-squirrel-startup": "^1.0.0",
+    "pg": "^8.7.3",
     "ws": "^8.8.0"
   },
   "devDependencies": {
