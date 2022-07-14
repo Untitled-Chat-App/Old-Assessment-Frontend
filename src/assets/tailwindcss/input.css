@@ -10,3 +10,7 @@
     font-family: "Aileron";
     src: url("../fonts/aileron.otf");
 }
+@font-face {
+    font-family: "Aileron-Light";
+    src: url("../fonts/aileron-light.otf");
+}

@@ -5,11 +5,12 @@ module.exports = {
         extend: {
             fontFamily: {
                 taro: ["Taro"],
-                aileron: ["Aileron"]
+                aileron: ["Aileron"],
+                aileron_light: ["Aileron-Light"]
             },
             backgroundImage: {
                 light_mode_bg: "url('../images/light_gradient.jpeg')",
-                dark_mode_bg: "url('../images/dark_gradient.jpeg')"
+                dark_mode_bg: "url('../images/background_gradient.png')"
             }
         },
     }
