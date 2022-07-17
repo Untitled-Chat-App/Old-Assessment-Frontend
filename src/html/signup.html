@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Untitled Chat</title>
+    <link rel="stylesheet" href="../assets/tailwindcss/styles.css" />
+</head>
+
+<body
+    class="transition-all duration-500 ease-in-out delay-150 dark:bg-black bg-light_mode_bg dark:bg-dark_mode_bg items-center justify-items-center">
+    <div class="flex items-center top-3 fixed bg-white bg-opacity-30 pl-[1vw] pr-[1vw] rounded-lg w-[98vw] left-[1vw]">
+        <img src="../assets/images/chat.png" class="h-[4vh]" alt="Logo" />
+        <span
+            class="pl-[1vw] self-center text-[4vh] font-semibold whitespace-nowrap dark:text-white transition-all duration-500 ease-in-out delay-150">Placeholder
+            Chat</span>
+            <form class="p-5" id="loginform">
+                <button type="submit" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 transition-all duration-500 ease-in-out delay-150 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Login</button>
+            </form>
+
+        <label for="default-toggle" class="inline-flex items-center cursor-pointer right-[1vw] fixed pr-[1vw]">
+            <input type="checkbox" id="default-toggle" class="sr-only peer" checked>
+            <div
+                class="w-11 h-6 bg-gray-200 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600">
+            </div>
+        </label>
+    </div>
+
+    <div class="h-[20vh]"></div>
+    <div class="justify-center text-center w-[100vw] flex">
+        <h1
+          class="pr-[0.6vw] font-aileron text-[4vw] font-black text-black dark:text-white transition-all duration-500 ease-in-out delay-150">Signup</h1>
+    </div>
+
+    <form class="p-5" id="signupform">
+        <div class="mb-6">
+            <label for="email"
+                class="block mb-2 text-sm transition-all duration-500 ease-in-out delay-150 font-medium text-gray-900 dark:text-gray-300">Email</label>
+            <input type="email" id="email"
+                class="bg-gray-50 border transition-all duration-500 ease-in-out delay-150 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                placeholder="name@fusionsid.com" required="">
+        </div>
+        <div class="mb-6">
+            <label for="username"
+                class="block mb-2 text-sm font-medium transition-all duration-500 ease-in-out delay-150 text-gray-900 dark:text-gray-300">Username</label>
+            <input type="text" id="username"
+                class="bg-gray-50 border border-gray-300 transition-all duration-500 ease-in-out delay-150 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                required="">
+        </div>
+        <div class="mb-6">
+            <label for="password"
+                class="block mb-2 text-sm font-medium text-gray-900 transition-all duration-500 ease-in-out delay-150 dark:text-gray-300">Password</label>
+            <input type="password" id="password"
+                class="bg-gray-50 border border-gray-300 transition-all duration-500 ease-in-out delay-150 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                required="">
+        </div>
+        <div class="flex items-start mb-6">
+            <div class="flex items-center h-5">
+                <input id="remember" type="checkbox" value=""
+                    class="w-4 h-4 bg-gray-50 rounded border transition-all duration-500 ease-in-out delay-150 border-gray-300 focus:ring-3 focus:ring-blue-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-blue-600 dark:ring-offset-gray-800">
+            </div>
+            <label for="remember"
+                class="ml-2 text-sm font-medium text-gray-900 transition-all duration-500 ease-in-out delay-150 dark:text-gray-300">Remember
+                me</label>
+        </div>
+        <button type="submit"
+            class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 transition-all duration-500 ease-in-out delay-150 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Submit</button>
+    </form>
+
+    <script>
+        const html = document.querySelector("html");
+        const darkmode = document.querySelector("#default-toggle");
+        function toggleDarkMode() {
+            darkmode.checked ? html.classList.add('dark') : html.classList.remove('dark')
+        }
+        darkmode.addEventListener("click", toggleDarkMode);
+        toggleDarkMode()
+
+        const electron = require('electron');
+        const { ipcRenderer } = electron;
+
+        const form = document.querySelector("#signupform");
+        form.addEventListener('submit', submition)
+
+        function submition(event) {
+            event.preventDefault();
+
+            const username = form.querySelector("#username")
+            const password = form.querySelector("#password")
+            const remember = form.querySelector("#remember")
+            const email = form.querySelector("#email")
+
+            data = {
+                username: username.value,
+                password: password.value,
+                remember: remember.checked,
+                email: email.value
+            }
+
+            ipcRenderer.send("signup", data)
+        }
+
+        const form2 = document.querySelector("#loginform");
+        form2.addEventListener('submit', submition2)
+
+        function submition2() {
+            event.preventDefault();
+            ipcRenderer.send("login", "e")
+        }
+    </script>
+</body>
+
+</html>

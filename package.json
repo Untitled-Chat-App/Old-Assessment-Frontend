@@ -10,7 +10,8 @@
     "make": "electron-forge make",
     "publish": "electron-forge publish",
     "lint": "echo \"No linting configured\"",
-    "build-css": "tailwindcss build -i src/assets/tailwindcss/input.css -o src/assets/tailwindcss/styles.css --watch"
+    "build-css": "tailwindcss build -i src/assets/tailwindcss/input.css -o src/assets/tailwindcss/styles.css --watch",
+    "build-osx": "electron-packager ./ --platform darwin --out ./dist --overwrite"
   },
   "keywords": [],
   "author": {
@@ -46,7 +47,11 @@
     }
   },
   "dependencies": {
+    "dotenv": "^16.0.1",
+    "electron-packager": "^15.5.1",
     "electron-squirrel-startup": "^1.0.0",
+    "node-fetch": "^2.6.1",
+    "node-rsa": "^1.1.1",
     "pg": "^8.7.3",
     "ws": "^8.8.0"
   },
