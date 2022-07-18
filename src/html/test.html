@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Chat</title>
+    </head>
+    <body>
+        <h1>WebSocket Chat</h1>
+        <form action="" onsubmit="sendMessage(event)">
+            <input type="text" id="messageText" autocomplete="off"/>
+            <button>Send</button>
+        </form>
+        <ul id='messages'>
+        </ul>
+        <script>
+            var access_token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJGdXNpb25TaWQiLCJleHAiOjE2NTgxODk0OTh9._-hhWKSbJW1bHkfjGjF5_yNkuoqWIyiuY8Ae3Ic2tTw"
+            var access_token = prompt("Enter access token", access_token)
+            var room_name = "e"
+            var ws = new WebSocket(`ws://0.0.0.0:443/api/ws/chatroom?access_token=${access_token}&room_name=${room_name}`);
+            ws.onmessage = function(event) {
+                var messages = document.getElementById('messages')
+                var message = document.createElement('li')
+                const data = JSON.parse(event.data)
+                var content = document.createTextNode(`${JSON.parse(data["user"])["username"]}: ${data["message"]}`)
+                message.appendChild(content)
+                messages.appendChild(message)
+            };
+            function sendMessage(event) {
+                var input = document.getElementById("messageText")
+                ws.send(input.value)
+                input.value = ''
+                event.preventDefault()
+            }
+
+
+        </script>
+    </body>
+</html>
