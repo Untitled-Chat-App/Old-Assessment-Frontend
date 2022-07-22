@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8" />
+  <title>Untitled Chat</title>
+  <link rel="stylesheet" href="../assets/tailwindcss/styles.css" />
+</head>
+
+<body
+  class="transition-all duration-500 ease-in-out delay-150 dark:bg-black bg-light_mode_bg dark:bg-dark_mode_bg items-center justify-items-center">
+  <!-- nav bar kinda thing with logo and name -->
+  <div class="flex items-center top-3 fixed bg-white bg-opacity-30 pl-[1vw] pr-[1vw] rounded-lg w-[98vw] left-[1vw]">
+    <img src="../assets/images/chat.png" class="h-[4vh]" alt="Logo" />
+    <span
+      class="pl-[1vw] self-center text-[4vh] font-semibold whitespace-nowrap dark:text-white transition-all duration-500 ease-in-out delay-150">Placeholder
+      Chat</span>
+
+    <label for="default-toggle" class="inline-flex items-center cursor-pointer right-[1vw] fixed pr-[1vw]">
+      <input type="checkbox" id="default-toggle" class="sr-only peer" checked />
+      <div
+        class="w-11 h-6 bg-gray-200 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600">
+      </div>
+    </label>
+  </div>
+
+  <div class="h-[25vh]"></div>
+
+  <div class="justify-center text-center w-[100vw] flex">
+    <h1
+      class="pr-[0.6vw] font-aileron text-[4vw] font-black text-black dark:text-white transition-all duration-500 ease-in-out delay-150">
+      "Because discord has a
+    </h1>
+    <h1
+      class="font-aileron text-[4vw] font-black text-black dark:text-white underline transition-all duration-500 ease-in-out delay-150">
+      skill
+    </h1>
+    <h1
+      class="pl-[0.6vw] font-aileron text-[4vw] font-black text-black dark:text-white transition-all duration-500 ease-in-out delay-150">
+      gap"
+    </h1>
+  </div>
+  <div class="justify-center text-center w-[100vw] flex">
+    <h1
+      class="font-taro text-[2vw] font-black text-gray-700 dark:text-gray-800 transition-all duration-500 ease-in-out delay-150">
+      Discord im sorry i really didnt mean it, i like discord
+    </h1>
+  </div>
+
+  <div class="h-[10vh]"></div>
+
+  <div>
+    <div class="flex gap-8 justify-center">
+      <div class="relative group w-[30vw] h-auto hover:scale-110 duration-300">
+        <form id="signup-button">
+          <button
+            class="relative w-[100%] text-center px-7 py-4 bg-white rounded-3xl leading-none divide-x divide-gray-600">
+            <span class="text-[3vw] font-taro text-indigo-600">Login or Sign Up</span>
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const electron = require("electron");
+    const { ipcRenderer } = electron;
+
+    // Dark mode
+    const html = document.querySelector("html");
+    const darkmode = document.querySelector("#default-toggle");
+
+    function toggleDarkMode() {
+      darkmode.checked
+        ? html.classList.add("dark")
+        : html.classList.remove("dark");
+    }
+
+    darkmode.addEventListener("click", toggleDarkMode);
+    toggleDarkMode();
+
+    //  If form is submitted let the backend know
+    const form = document.querySelector("form");
+
+    function submition(event) {
+      event.preventDefault();
+      ipcRenderer.send("open-signup-login-window");
+    }
+
+    form.addEventListener("submit", submition);
+  </script>
+</body>
+
+</html>

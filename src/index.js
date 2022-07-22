@@ -1,57 +1,29 @@
-// imports
-const url = require("url");
 const path = require("path");
-const WebSocket = require("ws");
-const rsa = require("node-rsa");
-const { URL, URLSearchParams } = require("url");
 const electron = require("electron");
 const { app, BrowserWindow, Menu, ipcMain } = electron;
-global.fetch = require("node-fetch");
 
-require("dotenv").config();
+// Local imports
+const { getAccessToken } = require("./scripts/requests");
+const mainWindowMenuTemplate = require("./scripts/menu");
 
+// This was recomended to be added for windows:
 if (require("electron-squirrel-startup")) {
-    // This was recomended to be added for windows i think
     app.quit();
 }
 
-function cleanupApp() {
-    // Ill probably close webscokets and stuff here
-}
+// Load enviroment variables from .env file
+require("dotenv").config();
 
-const apiUrl = process.env.API_URL;
+/* Constants */
+const API_URL = process.env.API_URL;
+const mainMenu = Menu.buildFromTemplate(mainWindowMenuTemplate);
+Menu.setApplicationMenu(mainMenu);
 
-// main menu
-const mainWindowMenuTemplate = [
-    {
-        label: "Untitled-Chat",
-        submenu: [
-            {
-                label: "Quit",
-                accelerator:
-                    process.platform == "darwin" ? "Command+Q" : "Ctrl+Q",
-                click() {
-                    cleanupApp();
-                    app.quit();
-                },
-            },
-            {
-                label: "Devtools",
-                accelerator:
-                    process.platform == "darwin" ? "Command+I" : "Ctrl+I",
-                click(item, window) {
-                    window.toggleDevTools();
-                },
-            },
-        ],
-    },
-];
+// Make app global
+global.app = app;
 
-// since mac go weird sometimes I need add an empty item at the start of the menu so it starts from 2
-if (process.platform == "darwin") {
-    mainWindowMenuTemplate.unshift({ label: "" });
-}
-
+/* Window Creation */
+let mainWindow, signUpWindow;
 // Creates main window, Launched on startup
 function createMainWindow() {
     // Create window
@@ -81,16 +53,12 @@ function createSignUpWindow() {
 
     // load in index.html file
     signUpWindow.loadFile(path.join(__dirname, "html/signup.html"));
-
-    // Create menu for app
-    const mainMenu = Menu.buildFromTemplate(mainWindowMenuTemplate);
-    Menu.setApplicationMenu(mainMenu);
 }
 
-// App events:
+/* Electron App Events: */
 
 // Launch app when ready
-app.on("ready", () => {
+app.on("ready", async () => {
     createMainWindow();
 });
 
@@ -108,65 +76,20 @@ app.on("activate", () => {
     }
 });
 
-ipcMain.on("open_signup_window", function (event, text) {
+/* IPC Main Events */
+// Launch login window when someone clicks the button on the home page
+ipcMain.on("open-signup-login-window", function (event, text) {
     createSignUpWindow();
 });
 
-ipcMain.on("signup", async function (event, data) {
+// When someone hits signup button with info
+ipcMain.on("signup-new-user", async function (event, data) {
     let token = await getAPIToken();
     signupUser(data, token);
-    createSignUpWindow;
+    signUpWindow = null;
 });
 
-ipcMain.on("login", function (event, data) {
+// When someone hits login button with info
+ipcMain.on("login-user", function (event, data) {
     signUpWindow.loadFile(path.join(__dirname, "html/login.html"));
 });
-
-async function getAPIToken() {
-    let token;
-
-    let login_details = new URLSearchParams({
-        username: process.env.USERNAME,
-        password: process.env.PASSWORD,
-    }).toString();
-
-    await fetch(`${apiUrl}/token`, {
-        method: "POST",
-        headers: {
-            Accept: "application/json",
-            "Content-Type": "application/x-www-form-urlencoded",
-        },
-        body: login_details,
-    })
-        .then((response) => response.json())
-        .then((data) => {
-            token = data["access_token"];
-        });
-    return token;
-}
-
-function signupUser(data, token) {
-    var key = new rsa().generateKeyPair();
-    let publicKey = key.exportKey("public");
-
-    // Create new user
-    fetch(`${apiUrl}/api/users/signup`, {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({
-            username: data.username,
-            email: data.email,
-            password: data.password,
-            public_key: JSON.stringify(publicKey),
-        }),
-    })
-        .then((response) => response.json())
-        .then((data) => {
-            console.log("Request complete! response:", data);
-            signUpWindow.close();
-            signUpWindow = null;
-        });
-}
