@@ -35,7 +35,7 @@ function createMainWindow() {
     });
 
     // load in index.html file
-    mainWindow.loadFile(path.join(__dirname, "html/index.html"));
+    mainWindow.loadFile(path.join(__dirname, "html/join.html"));
 
     // Create menu for app
     const mainMenu = Menu.buildFromTemplate(mainWindowMenuTemplate);
@@ -52,7 +52,7 @@ function createSignUpWindow() {
     });
 
     // load in index.html file
-    signUpWindow.loadFile(path.join(__dirname, "html/signup.html"));
+    signUpWindow.loadFile(path.join(__dirname, "html/join.html"));
 }
 
 /* Electron App Events: */
@@ -77,19 +77,9 @@ app.on("activate", () => {
 });
 
 /* IPC Main Events */
-// Launch login window when someone clicks the button on the home page
-ipcMain.on("open-signup-login-window", function (event, text) {
-    createSignUpWindow();
-});
-
-// When someone hits signup button with info
-ipcMain.on("signup-new-user", async function (event, data) {
-    let token = await getAPIToken();
-    signupUser(data, token);
-    signUpWindow = null;
-});
 
 // When someone hits login button with info
-ipcMain.on("login-user", function (event, data) {
-    signUpWindow.loadFile(path.join(__dirname, "html/login.html"));
+ipcMain.on("login-and-join-room", function (event, data) {
+    let token = await getAccessToken(data.username, data.password)
+    
 });

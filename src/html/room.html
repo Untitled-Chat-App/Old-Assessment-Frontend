@@ -20,6 +20,7 @@
         var ws = new WebSocket(
             `ws://0.0.0.0:443/api/ws/chatroom?access_token=${access_token}&room_id=${room_id}`
         );
+        
         ws.onmessage = function (event) {
             let msg = event.data
             var messages = document.getElementById('messages')
