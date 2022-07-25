@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Don't got a name yet</title>
+    <link rel="stylesheet" href="../assets/styles/home.css">
+</head>
+
+<body>
+    <div style="height: 20vh;"></div>
+
+    <div class="real-quote">
+        <h1>"Because discord has a</h1>
+        <h1 class="skill">skill</h1>
+        <h1>gap"</h1>
+    </div>
+
+    <div class="im-joking-discord">
+        <h1>Discord im sorry i really didnt mean it, i still like u discord</h1>
+    </div>
+
+    <div style="height: 3vh;"></div>
+
+    <form id="signup-button" class="sl-button">
+        <button>
+            <span>Login or Sign Up</span>
+        </button>
+    </form>
+
+    <script>
+        const { ipcRenderer } = require("electron");
+
+        const form = document.querySelector("#signup-button")
+
+        function submition(event) {
+            event.preventDefault();
+            ipcRenderer.send("login-or-join:index");
+        }
+
+        form.addEventListener("submit", submition);
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,46 @@
+@import url("./fonts.css");
+
+.login-form {
+    justify-content: center;
+    text-align: center;
+    align-items: center;
+    background-color: rgb(55, 57, 62);
+    width: 55vw;
+    height: 45vh;
+    margin: auto;
+    padding: 2rem;
+    border-radius: 0.25rem;
+    box-shadow: 0px 3px 15px rgba(0,0,0,0.2);
+    overflow: hidden;
+}
+
+.login-form h1 {
+    font-family: aileron;
+    font-size: 3vw;
+    color: white;
+}
+
+.login-form form label {
+    font-family: taro;
+    color: white;
+}
+
+.login-form form .text-input {
+    border-radius: 0.25rem;
+    width: 45vw;
+    background-color: black;
+    color: white;
+    font-family: taro;
+    border-width: 0;
+    font-size: 100%;
+    padding: 1rem;
+}
+
+.login-form form .submit-button {
+    background-color: white;
+    border-radius: 0.25rem;
+    cursor: pointer;
+    padding: 1rem;
+    width: 48vw;
+    border-width: 0;
+}

@@ -1,0 +1,71 @@
+@import url("./fonts.css");
+
+body {
+    background-image: url("../images/background_gradient.png");
+    background-color: black;
+}
+
+.real-quote {
+    justify-content: center;
+    text-align: center;
+    display: flex;
+}
+
+.real-quote h1 {
+    padding-left: 4px;
+    padding-right: 4px;
+    font-family: aileron;
+    font-size: 4vw;
+    color: white;
+}
+
+.real-quote .skill {
+    text-decoration: underline;
+}
+
+.im-joking-discord {
+    justify-content: center;
+    text-align: center;
+    bottom: 40px;
+    position: relative;
+    color: rgb(31 41 55);
+}
+
+.im-joking-discord h1 {
+    font-size: 2vw;
+    font-family: taro;
+}
+
+.sl-button {
+    justify-content: center;
+    text-align: center;
+    align-items: center;
+}
+
+.sl-button button {
+    background-color: white;
+    border-radius: 1.5rem;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+    padding-left: 3.25rem;
+    padding-right: 3.25rem;
+    border-width: 0;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    transition-duration: 300ms;
+}
+
+.sl-button button:hover {
+    transform: scale(1.1);
+    cursor: pointer;
+}
+
+.sl-button button span {
+    font-size: 2.75rem;
+    font-family: taro;
+    color: rgb(79, 70, 229);
+    /* So we get that nice cursor: */
+    cursor: pointer;
+    display: inline-block;
+    position: relative;
+    transition: 0.5s;
+}

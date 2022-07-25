@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Login</title>
+    <link rel="stylesheet" href="../assets/styles/login.css">
+</head>
+
+<body>
+    <div style="height: 15vh;"></div>
+    <div class="login-form">
+        <h1>Login to the app</h1>
+        <form>
+            <label for="username">Username:</label><br>
+            <input class="text-input" type="text" id="username" name="username" placeholder="CoolUser"><br>
+
+            <br>
+
+            <label for="password">Last name:</label><br>
+            <input class="text-input" type="password" id="password" name="password" placeholder="password123"><br><br>
+
+            <input class="submit-button" type="submit" value="Submit">
+        </form>
+    </div>
+
+    <script>
+        const { ipcRenderer } = require("electron");
+
+        const form = document.querySelector("form")
+
+        function submition(event) {
+            event.preventDefault();
+
+            var username = document.querySelector("#username")
+            var password = document.querySelector("#password")
+
+            data = {
+                username: username.value,
+                password: password.value
+            }
+
+            // Reset values
+            username.value = ""
+            password.value = ""
+
+            ipcRenderer.send("new-login:login", data);
+        }
+
+        form.addEventListener("submit", submition);
+    </script>
+</body>
+
+</html>

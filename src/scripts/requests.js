@@ -14,8 +14,8 @@ async function getAccessToken(username = null, password = null) {
 
     // Format login details into query params
     let login_details = new URLSearchParams({
-        username: process.env.USERNAME,
-        password: process.env.PASSWORD,
+        username: username,
+        password: password,
     }).toString();
 
     await fetch(`${API_URL}/token`, {
@@ -60,4 +60,4 @@ async function signupUser(data) {
         });
 }
 
-module.exports = {getAccessToken, signupUser};
+module.exports = { getAccessToken, signupUser };
