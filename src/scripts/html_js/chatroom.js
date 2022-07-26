@@ -53,13 +53,15 @@ function start(access_token) {
             // On Events
             if (msg["event"] === "User Disconnect") {
                 user = JSON.parse(msg["user"]);
-                var what_happened = `${user["username"]} left the chat`;
+                var what_happened = document.createTextNode(`${user["username"]} left the chat`);;
                 message_content_span.style.color = "red";
+                message_content_span.appendChild(what_happened);
             }
             if (msg["event"] === "User Join") {
                 user = JSON.parse(msg["user"]);
-                var what_happened = `${user["username"]} joined the chat`;
+                var what_happened = document.createTextNode(`${user["username"]} joined the chat`)
                 message_content_span.style.color = "red";
+                message_content_span.appendChild(what_happened);
             }
         } else {
             // On normal message:
