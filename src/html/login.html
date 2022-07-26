@@ -13,14 +13,18 @@
         <h1>Login to the app</h1>
         <form>
             <label for="username">Username:</label><br>
-            <input class="text-input" type="text" id="username" name="username" placeholder="CoolUser"><br>
+            <input class="text-input" type="text" id="username" name="username" placeholder="CoolUser" required><br>
 
             <br>
 
             <label for="password">Last name:</label><br>
-            <input class="text-input" type="password" id="password" name="password" placeholder="password123"><br><br>
+            <input class="text-input" type="password" id="password" name="password" placeholder="password123" required><br><br>
 
             <input class="submit-button" type="submit" value="Submit">
+
+            <br><br>
+
+            <button id="signup-link" onclick="signUpInstead()">Don't have an account? Sign Up instead</button>
         </form>
     </div>
 
@@ -45,9 +49,14 @@
             password.value = ""
 
             ipcRenderer.send("new-login:login", data);
+
         }
 
         form.addEventListener("submit", submition);
+
+        function signUpInstead() {
+            ipcRenderer.send("open-signup:login");
+        }
     </script>
 </body>
 

@@ -1,6 +1,8 @@
 const fetch = require("node-fetch");
+const Store = require("electron-store");
 const { URLSearchParams } = require("url");
 
+const store = new Store();
 require("dotenv").config();
 const API_URL = process.env.API_URL;
 
@@ -29,7 +31,7 @@ async function getAccessToken(username = null, password = null) {
         .then((response) => response.json())
         .then((data) => {
             token = data["access_token"];
-        });
+        })
 
     return token;
 }
@@ -39,6 +41,9 @@ async function signupUser(data) {
 
     let key = new rsa().generateKeyPair();
     let publicKey = key.exportKey("public");
+    let privateKey = key.exportKey("private");
+
+    store.set("private_key", privateKey) // You delete my app too bad
 
     // Create new user
     fetch(`${API_URL}/api/users/signup`, {

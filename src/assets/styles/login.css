@@ -6,7 +6,7 @@
     align-items: center;
     background-color: rgb(55, 57, 62);
     width: 55vw;
-    height: 45vh;
+    height: auto;
     margin: auto;
     padding: 2rem;
     border-radius: 0.25rem;

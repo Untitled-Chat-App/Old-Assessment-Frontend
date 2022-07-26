@@ -1,10 +1,23 @@
 const path = require("path");
 const { WebSocket } = require("ws");
-const { app, BrowserWindow, Menu, ipcMain, ipcRenderer, contextBridge } = require("electron");
+const Store = require("electron-store");
+const {
+    app,
+    BrowserWindow,
+    Menu,
+    ipcMain,
+    ipcRenderer,
+    contextBridge,
+} = require("electron");
 
 // Local imports
-const { getAccessToken } = require("./scripts/requests");
-const { firstTimeUserPage, createLoginWindow } = require("./scripts/windows");
+const { getAccessToken, signupUser} = require("./scripts/requests");
+const {
+    firstTimeUserPage,
+    createLoginWindow,
+    createSignedInWindow,
+    createSignupWindow,
+} = require("./scripts/windows");
 const mainWindowMenuTemplate = require("./scripts/menu");
 
 // This was recomended to be added for windows:
@@ -20,17 +33,45 @@ const API_URL = process.env.API_URL;
 const mainMenu = Menu.buildFromTemplate(mainWindowMenuTemplate);
 Menu.setApplicationMenu(mainMenu);
 
+const store = new Store();
+
 // Make app global
 global.app = app;
 
 // Define for later
-let firstTimeUserPageWindow, loginWindow;
+let firstTimeUserPageWindow, loginWindow, signupWindow;
 
 /* Electron App Events: */
 
+async function checkIfFirstTimeUser() {
+    let token = await getAccessToken(
+        store.get("username"),
+        store.get("password")
+    );
+    if (token === undefined) {
+        return false;
+    } else {
+        return true;
+    }
+}
+
+function logOut() {
+    try {
+        store.delete("username");
+        store.delete("password");
+        store.delete("private_key");
+        store.delete("access_token");
+    } catch (e) {}
+}
+
 // Launch app when ready
 app.on("ready", async () => {
-    firstTimeUserPageWindow = firstTimeUserPage();
+    // logOut()
+    if (await checkIfFirstTimeUser()) {
+        createSignedInWindow();
+    } else {
+        firstTimeUserPageWindow = firstTimeUserPage();
+    }
 });
 
 // if all windows are closed, close app. But since mac is special don't close it.
@@ -58,9 +99,24 @@ ipcMain.on("login-or-join:index", function (event) {
 
 // When someone logs in
 ipcMain.on("new-login:login", async function (event, data) {
-    let token = await getAccessToken(data.username, data.password)
+    let token = await getAccessToken(data.username, data.password);
     if (token === undefined) {
-        console.log("Wrong password skill issue")
+        return console.log("Wrong password skill issue");
     }
-    
+
+    store.set("username", data.username);
+    store.set("password", data.password);
+
+    store.set("access_token", token);
 });
+
+ipcMain.on("open-signup:login", function (event) {
+    loginWindow.close();
+    loginWindow = null;
+    signupWindow = createSignupWindow()
+
+});
+
+ipcMain.on("new-signup:login", function (event, data) {
+    console.log(data)
+})

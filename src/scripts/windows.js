@@ -8,7 +8,7 @@ Menu.setApplicationMenu(mainMenu);
 /* Window Creation */
 
 // Define for later because JS IS WEIRD AF
-let firstTimeWindow, loginWindow;
+let firstTimeWindow, loginWindow, signedInWindow, signupWindow;
 
 // Creates first time user page, Launched if first time opening
 function firstTimeUserPage() {
@@ -43,7 +43,41 @@ function createLoginWindow() {
     return loginWindow;
 }
 
+function createSignupWindow() {
+    signupWindow = new BrowserWindow({
+        webPreferences: {
+            contextIsolation: false,
+            nodeIntegration: true,
+        },
+        width: 1300,
+        height: 760,
+    });
+
+    // load in index.html file
+    signupWindow.loadFile(path.join(__dirname, "../html/signup.html"));
+
+    return signupWindow;
+}
+
+function createSignedInWindow() {
+    signedInWindow = new BrowserWindow({
+        webPreferences: {
+            contextIsolation: false,
+            nodeIntegration: true,
+        },
+        width: 1300,
+        height: 760,
+    });
+
+    // load in index.html file
+    signedInWindow.loadFile(path.join(__dirname, "../html/signed_in.html"));
+
+    return signedInWindow;
+}
+
 module.exports = {
     firstTimeUserPage,
     createLoginWindow,
+    createSignedInWindow,
+    createSignupWindow
 };
