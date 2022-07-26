@@ -52,7 +52,7 @@
             password.value = ""
             email.value = ""
 
-            ipcRenderer.send("new-signup:login", data);
+            ipcRenderer.send("new-signup:signup", data);
         }
 
         form.addEventListener("submit", submition);

@@ -39,7 +39,7 @@ const store = new Store();
 global.app = app;
 
 // Define for later
-let firstTimeUserPageWindow, loginWindow, signupWindow;
+let firstTimeUserPageWindow, loginWindow, signupWindow, signedInWindow;
 
 /* Electron App Events: */
 
@@ -66,9 +66,9 @@ function logOut() {
 
 // Launch app when ready
 app.on("ready", async () => {
-    // logOut()
+    logOut()
     if (await checkIfFirstTimeUser()) {
-        createSignedInWindow();
+        signedInWindow = createSignedInWindow();
     } else {
         firstTimeUserPageWindow = firstTimeUserPage();
     }
@@ -98,16 +98,20 @@ ipcMain.on("login-or-join:index", function (event) {
 });
 
 // When someone logs in
-ipcMain.on("new-login:login", async function (event, data) {
+ipcMain.handle("new-login:login", async function (event, data) {
     let token = await getAccessToken(data.username, data.password);
     if (token === undefined) {
-        return console.log("Wrong password skill issue");
+        return "Incorrect username or password (skill issue)"
     }
 
     store.set("username", data.username);
     store.set("password", data.password);
 
     store.set("access_token", token);
+
+    loginWindow.close();
+    loginWindow = null;
+    signedInWindow = createSignedInWindow();
 });
 
 ipcMain.on("open-signup:login", function (event) {
@@ -117,6 +121,6 @@ ipcMain.on("open-signup:login", function (event) {
 
 });
 
-ipcMain.on("new-signup:login", function (event, data) {
+ipcMain.on("new-signup:signup", function (event, data) {
     console.log(data)
 })

@@ -9,3 +9,8 @@
     font-family: "taro";
     src: url("../fonts/taro.otf");
 }
+
+@font-face {
+    font-family: "aileron-light";
+    src: url("../fonts/aileron-light.otf");
+}

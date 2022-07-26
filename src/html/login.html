@@ -10,6 +10,7 @@
 <body>
     <div style="height: 15vh;"></div>
     <div class="login-form">
+        <p id="alert" style="color: red;"></p>
         <h1>Login to the app</h1>
         <form>
             <label for="username">Username:</label><br>
@@ -48,7 +49,10 @@
             username.value = ""
             password.value = ""
 
-            ipcRenderer.send("new-login:login", data);
+            ipcRenderer.invoke("new-login:login", data).then((data) => {
+                const alertP = document.getElementById("alert")
+                alertP.innerHTML = data
+            });
 
         }
 
