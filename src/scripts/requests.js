@@ -1,4 +1,5 @@
 const fetch = require("node-fetch");
+const rsa = require("node-rsa");
 const Store = require("electron-store");
 const { URLSearchParams } = require("url");
 
@@ -6,10 +7,10 @@ const store = new Store();
 require("dotenv").config();
 const API_URL = process.env.API_URL;
 
-async function getAccessToken(username = null, password = null) {
+async function getAccessToken(username = null, password = null, admin = false) {
     let token;
 
-    if (username == null && password == null) {
+    if (admin) {
         username = process.env.USERNAME;
         password = process.env.PASSWORD;
     }
@@ -31,22 +32,22 @@ async function getAccessToken(username = null, password = null) {
         .then((response) => response.json())
         .then((data) => {
             token = data["access_token"];
-        })
+        });
 
     return token;
 }
 
 async function signupUser(data) {
-    let access_token = await getAccessToken();
+    let access_token = await getAccessToken(null, null, (admin = true));
 
-    let key = new rsa().generateKeyPair();
-    let publicKey = key.exportKey("public");
-    let privateKey = key.exportKey("private");
+    let keys = new rsa().generateKeyPair();
+    let publicKey = keys.exportKey("public");
+    let privateKey = keys.exportKey("private");
 
-    store.set("private_key", privateKey) // You delete my app too bad
+    store.set("private_key", privateKey); // You delete my app too bad
 
     // Create new user
-    fetch(`${API_URL}/api/users/signup`, {
+    await fetch(`${API_URL}/api/users/signup`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
@@ -60,12 +61,59 @@ async function signupUser(data) {
         }),
     })
         .then((response) => response.json())
-        .then((data) => {
-            return data;
+        .then((json_data) => {
+            data = json_data;
         });
+
+    return data;
 }
 
-module.exports = { getAccessToken, signupUser };
+async function getUserWithToken(token) {
+    let data;
+
+    await fetch(`${API_URL}/api/user/me`, {
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+        },
+    })
+        .then((response) => response.json())
+        .then((json_data) => {
+            data = json_data;
+        });
+
+    return data;
+}
+
+async function updateUserDetails(user_id, attribute, new_value) {
+    let access_token = await getAccessToken(null, null, (admin = true));
+
+    await fetch(`${API_URL}/api/users/${user_id}`, {
+        method: "PATCH",
+        headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${access_token}`,
+        },
+        body: JSON.stringify({
+            attribute: attribute,
+            new_value: new_value,
+        }),
+    })
+        .then((response) => response.json())
+        .then((json_data) => {
+            data = json_data;
+        });
+
+    return data;
+}
+
+module.exports = {
+    getAccessToken,
+    signupUser,
+    getUserWithToken,
+    updateUserDetails,
+};
 
 /* This is not wasted space:
 ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣀⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀

@@ -1,6 +1,7 @@
 const path = require("path");
 const { WebSocket } = require("ws");
 const Store = require("electron-store");
+const rsa  = require("node-rsa")
 const {
     app,
     BrowserWindow,
@@ -11,7 +12,7 @@ const {
 } = require("electron");
 
 // Local imports
-const { getAccessToken, signupUser} = require("./scripts/requests");
+const { getAccessToken, signupUser, getUserWithToken, updateUserDetails} = require("./scripts/requests");
 const {
     firstTimeUserPage,
     createLoginWindow,
@@ -46,7 +47,7 @@ let firstTimeUserPageWindow, loginWindow, signupWindow, signedInWindow;
 async function checkIfFirstTimeUser() {
     let token = await getAccessToken(
         store.get("username"),
-        store.get("password")
+        store.get("password"),
     );
     if (token === undefined) {
         return false;
@@ -66,8 +67,8 @@ function logOut() {
 
 // Launch app when ready
 app.on("ready", async () => {
-    logOut()
-    if (await checkIfFirstTimeUser()) {
+    let isFirstTimeUser = await checkIfFirstTimeUser()
+    if (isFirstTimeUser) {
         signedInWindow = createSignedInWindow();
     } else {
         firstTimeUserPageWindow = firstTimeUserPage();
@@ -109,6 +110,18 @@ ipcMain.handle("new-login:login", async function (event, data) {
 
     store.set("access_token", token);
 
+
+    let keys = new rsa().generateKeyPair();
+    let publicKey = keys.exportKey("public");
+    let privateKey = keys.exportKey("private");
+
+    store.set("private_key", privateKey)
+
+    let user = await getUserWithToken()
+    let user_id = user.id
+
+    await updateUserDetails(user_id, "public_key", publicKey)
+
     loginWindow.close();
     loginWindow = null;
     signedInWindow = createSignedInWindow();
@@ -121,6 +134,28 @@ ipcMain.on("open-signup:login", function (event) {
 
 });
 
-ipcMain.on("new-signup:signup", function (event, data) {
-    console.log(data)
+ipcMain.handle("new-signup:signup", async function (event, data) {
+    let result = await signupUser(data)
+    if (result.status_code === 409) {
+        return `Failed to create user: ${result.detail}`
+    }
+    if (result.success === true) {
+        console.log("New user created")
+    }
+    signupWindow.close()
+    signupWindow = null
+    signedInWindow = createSignedInWindow();
+})
+
+ipcMain.on("sign-out:signed_in", async function(event) {
+    signedInWindow.close()
+    signedInWindow = null
+    logOut()
+    firstTimeUserPageWindow = firstTimeUserPage();
+})
+
+ipcMain.on("join-room-window:signed_in", async function(event) {
+    signedInWindow.close()
+    signedInWindow=null
+    console.log("e time")
 })

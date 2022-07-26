@@ -10,6 +10,7 @@
 <body>
     <div style="height: 15vh;"></div>
     <div class="login-form">
+        <p id="alert" style="color: red;"></p>
         <h1>Sign up to the app</h1>
         <form>
             <label for="username">Username:</label><br>
@@ -18,12 +19,14 @@
             <br>
 
             <label for="email">Email:</label><br>
-            <input class="text-input" type="email" id="email" name="email" placeholder="coolperson@cool.com" required><br>
+            <input class="text-input" type="email" id="email" name="email" placeholder="coolperson@cool.com"
+                required><br>
 
             <br>
 
             <label for="password">Last name:</label><br>
-            <input class="text-input" type="password" id="password" name="password" placeholder="password123" required><br><br>
+            <input class="text-input" type="password" id="password" name="password" placeholder="password123"
+                required><br><br>
 
             <input class="submit-button" type="submit" value="Submit">
         </form>
@@ -52,7 +55,10 @@
             password.value = ""
             email.value = ""
 
-            ipcRenderer.send("new-signup:signup", data);
+            ipcRenderer.invoke("new-signup:signup", data).then((data) => {
+                const alertP = document.getElementById("alert")
+                alertP.innerHTML = data
+            });
         }
 
         form.addEventListener("submit", submition);

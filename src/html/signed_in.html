@@ -1,10 +1,58 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
-    <title>Document</title>
+    <title>Don't got a name yet</title>
+    <link rel="stylesheet" href="../assets/styles/signed_in.css">
 </head>
+
 <body>
-    <h1>Join a room</h1>
+    <div style="height: 20vh;"></div>
+
+    <div class="real-quote">
+        <h1>What would you like to do?</h1>
+    </div>
+
+
+    <div style="height: 5vh;"></div>
+    
+    <div class="buttons">
+        <form id="join-room-button" class="sl-button">
+            <button>
+                <span>Join Room</span>
+            </button>
+        </form>
+
+        <form id="sign-out-button" class="sl-button">
+            <button>
+                <span>Sign Out</span>
+            </button>
+        </form>
+    </div>
+
+    <script>
+        const { ipcRenderer } = require("electron");
+
+        const form1 = document.querySelector("#join-room-button")
+
+        function submition1(event) {
+            event.preventDefault();
+            ipcRenderer.send("join-room-window:signed_in");
+        }
+
+        form1.addEventListener("submit", submition1);
+
+
+        const form2 = document.querySelector("#sign-out-button")
+
+        function submition2(event) {
+            event.preventDefault();
+            ipcRenderer.send("sign-out:signed_in");
+        }
+
+        form2.addEventListener("submit", submition2);
+    </script>
 </body>
+
 </html>
