@@ -108,11 +108,33 @@ async function updateUserDetails(user_id, attribute, new_value) {
     return data;
 }
 
+async function getRoomById(room_id) {
+    let access_token = await getAccessToken(
+        store.get("username"),
+        store.get("password")
+    );
+
+    await fetch(`${API_URL}/api/chatroom/${room_id}`, {
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${access_token}`,
+        },
+    })
+        .then((response) => response.json())
+        .then((json_data) => {
+            data = json_data;
+        });
+
+    return data;
+}
+
 module.exports = {
     getAccessToken,
     signupUser,
     getUserWithToken,
     updateUserDetails,
+    getRoomById,
 };
 
 /* This is not wasted space:
