@@ -122,6 +122,7 @@ async function createNewRoom(room_name, room_description=null) {
         .then((response) => response.json())
         .then((json_data) => {
             data = json_data;
+            console.log(data)
         });
 
     return data;
