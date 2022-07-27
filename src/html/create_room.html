@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Login</title>
+    <link rel="stylesheet" href="../assets/styles/login.css">
+</head>
+
+<body>
+    <div style="height: 15vh;"></div>
+    <div class="login-form">
+        <p id="alert" style="color: red;"></p>
+        <h1>Create new room</h1>
+        <form>
+            <label for="room_name">Room Name:</label><br>
+            <input class="text-input" type="text" id="room_name" name="room_name" placeholder="Rickrollers" required><br>
+
+            <br>
+
+            <label for="description">Room Description:</label><br>
+            <input class="text-input" type="text" id="description" name="description" placeholder="For people who like rickrolling"><br><br>
+
+            <input class="submit-button" type="submit" value="Create Room">
+        </form>
+    </div>
+
+    <script>
+        const { ipcRenderer } = require("electron");
+
+        const form = document.querySelector("form")
+
+        function submition(event) {
+            event.preventDefault();
+
+            var room_name = document.querySelector("#room_name")
+            var room_description = document.querySelector("#description")
+
+            data = {
+                room_name: room_name.value,
+                room_description: room_description.value
+            }
+
+            // Reset values
+            room_name.value = ""
+            room_description.value = ""
+
+            ipcRenderer.invoke("new-room-create:create_room", data).then((data) => {
+                const alertP = document.getElementById("alert")
+                alertP.innerHTML = data
+            });
+
+        }
+
+        form.addEventListener("submit", submition);
+    </script>
+</body>
+
+</html>

@@ -17,7 +17,8 @@ const {
     signupUser,
     getUserWithToken,
     updateUserDetails,
-    getRoomById
+    getRoomById,
+    createNewRoom,
 } = require("./scripts/requests");
 const {
     firstTimeUserPage,
@@ -26,6 +27,7 @@ const {
     createSignupWindow,
     createRoomWindow,
     createEnterRoomIDWindow,
+    createNewRoomWindow,
 } = require("./scripts/windows");
 const mainWindowMenuTemplate = require("./scripts/menu");
 
@@ -38,7 +40,7 @@ if (require("electron-squirrel-startup")) {
 require("dotenv").config();
 
 /* Constants */
-const API_URL = process.env.API_URL;
+const API_URL = "https://chatapi.fusionsid.xyz";
 const mainMenu = Menu.buildFromTemplate(mainWindowMenuTemplate);
 Menu.setApplicationMenu(mainMenu);
 
@@ -48,7 +50,13 @@ const store = new Store();
 global.app = app;
 
 // Define for later
-let firstTimeUserPageWindow, loginWindow, signupWindow, signedInWindow, enterRoomIDWindow, roomWindow;
+let firstTimeUserPageWindow,
+    loginWindow,
+    signupWindow,
+    signedInWindow,
+    enterRoomIDWindow,
+    roomWindow,
+    newRoomWindow;
 
 /* Electron App Events: */
 
@@ -91,9 +99,14 @@ app.on("window-all-closed", () => {
 });
 
 // If no windows are open launch one
-app.on("activate", () => {
+app.on("activate", async () => {
     if (BrowserWindow.getAllWindows().length === 0) {
-        firstTimeUserPageWindow = firstTimeUserPage();
+        let isFirstTimeUser = await checkIfFirstTimeUser();
+        if (isFirstTimeUser) {
+            signedInWindow = createSignedInWindow();
+        } else {
+            firstTimeUserPageWindow = firstTimeUserPage();
+        }
     }
 });
 
@@ -124,10 +137,7 @@ ipcMain.handle("new-login:login", async function (event, data) {
 
     store.set("private_key", privateKey);
 
-    let user = await getUserWithToken();
-    let user_id = user.id;
-
-    await updateUserDetails(user_id, "public_key", publicKey);
+    await updateUserDetails("public_key", publicKey);
 
     loginWindow.close();
     loginWindow = null;
@@ -163,26 +173,24 @@ ipcMain.on("sign-out:signed_in", async function (event) {
 ipcMain.on("join-room-window:signed_in", async function (event) {
     signedInWindow.close();
     signedInWindow = null;
-    enterRoomIDWindow = createEnterRoomIDWindow()
+    enterRoomIDWindow = createEnterRoomIDWindow();
 });
-
 
 ipcMain.handle("join-new-room:join_room", async function (event, room_id) {
     let room = null;
     try {
-        room = await getRoomById(room_id)
+        room = await getRoomById(room_id);
     } catch (e) {
-        console.log("Skill gap")
+        console.log("Skill gap");
     }
     if (room === null || room === undefined) {
-        return "Room not found (lil' dif in skill level ngl)"
+        return "Room not found (lil' dif in skill level ngl)";
     }
-    enterRoomIDWindow.close()
+    enterRoomIDWindow.close();
     enterRoomIDWindow = null;
 
-    connect_to_room(room.room_id)
+    connect_to_room(room.room_id);
 });
-
 
 // The real stuff
 async function connect_to_room(room_id) {
@@ -191,17 +199,30 @@ async function connect_to_room(room_id) {
         store.get("password")
     );
 
-    roomWindow = createRoomWindow()
+    roomWindow = createRoomWindow();
 
     ipcMain.handle("gimme-connection:room", async function (event) {
-        let user = await getUserWithToken(access_token)
-        let room_data =  await getRoomById(room_id)
+        let user = await getUserWithToken(access_token);
+        let room_data = await getRoomById(room_id);
         data = {
             user: user,
             access_token: access_token,
             room_data: room_data,
-        }
-        return data
-    }) 
-    
+        };
+        return data;
+    });
 }
+
+ipcMain.on("create-room:signed_in", function (event) {
+    signedInWindow.close();
+    signedInWindow = null;
+    newRoomWindow = createNewRoomWindow();
+});
+
+ipcMain.handle("new-room-create:create_room", async function (event, data) {
+    let room_id;
+    console.log(data);
+    room = await createNewRoom(data.room_name, data.room_description);
+    room_id = room.room_id;
+    return `Room created successfully: ${room_id}`;
+});

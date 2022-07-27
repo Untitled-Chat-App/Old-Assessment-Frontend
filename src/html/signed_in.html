@@ -29,6 +29,12 @@
                 <span>Sign Out</span>
             </button>
         </form>
+
+        <form id="create-room-button" class="sl-button">
+            <button>
+                <span>Create Room</span>
+            </button>
+        </form>
     </div>
 
     <script>
@@ -52,6 +58,15 @@
         }
 
         form2.addEventListener("submit", submition2);
+
+        const form3 = document.querySelector("#create-room-button")
+
+        function submition3(event) {
+            event.preventDefault();
+            ipcRenderer.send("create-room:signed_in");
+        }
+
+        form3.addEventListener("submit", submition3);
     </script>
 </body>
 

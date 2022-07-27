@@ -5,7 +5,7 @@ const { URLSearchParams } = require("url");
 
 const store = new Store();
 require("dotenv").config();
-const API_URL = process.env.API_URL;
+const API_URL = "https://chatapi.fusionsid.xyz";
 
 async function getAccessToken(username = null, password = null, admin = false) {
     let token;
@@ -38,8 +38,6 @@ async function getAccessToken(username = null, password = null, admin = false) {
 }
 
 async function signupUser(data) {
-    let access_token = await getAccessToken(null, null, (admin = true));
-
     let keys = new rsa().generateKeyPair();
     let publicKey = keys.exportKey("public");
     let privateKey = keys.exportKey("private");
@@ -51,7 +49,6 @@ async function signupUser(data) {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${access_token}`,
         },
         body: JSON.stringify({
             username: data.username,
@@ -86,10 +83,10 @@ async function getUserWithToken(token) {
     return data;
 }
 
-async function updateUserDetails(user_id, attribute, new_value) {
-    let access_token = await getAccessToken(null, null, (admin = true));
+async function updateUserDetails(attribute, new_value) {
+    let access_token = await getAccessToken(store.get("password"), store.get("username"));
 
-    await fetch(`${API_URL}/api/users/${user_id}`, {
+    await fetch(`${API_URL}/api/user/me`, {
         method: "PATCH",
         headers: {
             "Content-Type": "application/json",
@@ -98,6 +95,28 @@ async function updateUserDetails(user_id, attribute, new_value) {
         body: JSON.stringify({
             attribute: attribute,
             new_value: new_value,
+        }),
+    })
+        .then((response) => response.json())
+        .then((json_data) => {
+            data = json_data;
+        });
+
+    return data;
+}
+
+async function createNewRoom(room_name, room_description=null) {
+    let access_token = await getAccessToken(store.get("username"), store.get("password"));
+
+    await fetch(`${API_URL}/api/chatroom/new`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${access_token}`,
+        },
+        body: JSON.stringify({
+            room_name: room_name,
+            room_description: room_description,
         }),
     })
         .then((response) => response.json())
@@ -134,6 +153,7 @@ module.exports = {
     signupUser,
     getUserWithToken,
     updateUserDetails,
+    createNewRoom,
     getRoomById,
 };
 

@@ -11,7 +11,9 @@
     "publish": "electron-forge publish",
     "lint": "echo \"No linting configured\"",
     "build-css": "tailwindcss build -i src/assets/tailwindcss/input.css -o src/assets/tailwindcss/styles.css --watch",
-    "build-osx": "electron-packager ./ --platform darwin --out ./dist --overwrite"
+    "build-osx": "electron-packager ./ untitled-chat-app --platform darwin --out ./dist/mac --overwrite",
+    "build-windows": "electron-packager ./ untitled-chat-app --overwrite --asar=true --platform=win32 --arch=ia32 --prune=true --out ./dist/windows --version-string.CompanyName=CE --version-string.FileDescription=CE --version-string.ProductName='Unititled Chat'",
+    "build-linux": "electron-packager ./ untitled-chat-app --overwrite --asar=true --platform=linux --arch=x64 --prune=true --out ./dist/linux"
   },
   "keywords": [],
   "author": {

@@ -8,7 +8,13 @@ Menu.setApplicationMenu(mainMenu);
 /* Window Creation */
 
 // Define for later because JS IS WEIRD AF
-let firstTimeWindow, loginWindow, signedInWindow, signupWindow, enterRoomIDWindow, roomWindow;
+let firstTimeWindow,
+    loginWindow,
+    signedInWindow,
+    signupWindow,
+    enterRoomIDWindow,
+    roomWindow,
+    newRoomWindow;
 
 // Creates first time user page, Launched if first time opening
 function firstTimeUserPage() {
@@ -25,6 +31,22 @@ function firstTimeUserPage() {
     firstTimeWindow.loadFile(path.join(__dirname, "../html/index.html"));
 
     return firstTimeWindow;
+}
+
+function createNewRoomWindow() {
+    newRoomWindow = new BrowserWindow({
+        webPreferences: {
+            contextIsolation: false,
+            nodeIntegration: true,
+        },
+        width: 1300,
+        height: 760,
+    });
+
+    // load in index.html file
+    newRoomWindow.loadFile(path.join(__dirname, "../html/create_room.html"));
+
+    return newRoomWindow;
 }
 
 function createLoginWindow() {
@@ -113,5 +135,6 @@ module.exports = {
     createSignedInWindow,
     createSignupWindow,
     createEnterRoomIDWindow,
-    createRoomWindow
+    createRoomWindow,
+    createNewRoomWindow
 };
