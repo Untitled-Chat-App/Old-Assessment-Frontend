@@ -7,18 +7,14 @@ const store = new Store();
 require("dotenv").config();
 const API_URL = "https://chatapi.fusionsid.xyz";
 
-async function getAccessToken(username = null, password = null, admin = false) {
+async function getAccessToken(username = null, password = null) {
     let token;
-
-    if (admin) {
-        username = process.env.USERNAME;
-        password = process.env.PASSWORD;
-    }
 
     // Format login details into query params
     let login_details = new URLSearchParams({
         username: username,
         password: password,
+        scope: "create_rooms"
     }).toString();
 
     await fetch(`${API_URL}/token`, {
@@ -122,7 +118,6 @@ async function createNewRoom(room_name, room_description=null) {
         .then((response) => response.json())
         .then((json_data) => {
             data = json_data;
-            console.log(data)
         });
 
     return data;

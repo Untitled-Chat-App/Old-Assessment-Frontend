@@ -155,9 +155,6 @@ ipcMain.handle("new-signup:signup", async function (event, data) {
     if (result.status_code === 409) {
         return `Failed to create user: ${result.detail}`;
     }
-    if (result.success === true) {
-        console.log("New user created");
-    }
     signupWindow.close();
     signupWindow = null;
     signedInWindow = createSignedInWindow();
@@ -181,7 +178,7 @@ ipcMain.handle("join-new-room:join_room", async function (event, room_id) {
     try {
         room = await getRoomById(room_id);
     } catch (e) {
-        console.log("Skill gap");
+        // "Skill gap"
     }
     if (room === null || room === undefined) {
         return "Room not found (lil' dif in skill level ngl)";
@@ -221,7 +218,6 @@ ipcMain.on("create-room:signed_in", function (event) {
 
 ipcMain.handle("new-room-create:create_room", async function (event, data) {
     let room_id;
-    console.log(data);
     room = await createNewRoom(data.room_name, data.room_description);
     room_id = room.room_id;
     return `Room created successfully: ${room_id}`;
