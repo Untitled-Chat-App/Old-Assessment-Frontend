@@ -14,7 +14,7 @@ async function getAccessToken(username = null, password = null) {
     let login_details = new URLSearchParams({
         username: username,
         password: password,
-        scope: "create_rooms"
+        scope: "create_rooms%20mofify_self"
     }).toString();
 
     await fetch(`${API_URL}/token`, {
