@@ -7,14 +7,17 @@ const store = new Store();
 require("dotenv").config();
 const API_URL = "https://chatapi.fusionsid.xyz";
 
-async function getAccessToken(username = null, password = null) {
+async function getAccessToken(username = null, password = null, scopes = null) {
     let token;
 
+    if (scopes === null) {
+        scopes = ""
+    }
     // Format login details into query params
     let login_details = new URLSearchParams({
         username: username,
         password: password,
-        scope: ["create_rooms mofify_self"]
+        scope: scopes
     }).toString();
 
     await fetch(`${API_URL}/token`, {
@@ -80,7 +83,7 @@ async function getUserWithToken(token) {
 }
 
 async function updateUserDetails(attribute, new_value) {
-    let access_token = await getAccessToken(store.get("password"), store.get("username"));
+    let access_token = await getAccessToken(store.get("password"), store.get("username"), "mofify_self");
 
     await fetch(`${API_URL}/api/user/me`, {
         method: "PATCH",
@@ -102,7 +105,7 @@ async function updateUserDetails(attribute, new_value) {
 }
 
 async function createNewRoom(room_name, room_description=null) {
-    let access_token = await getAccessToken(store.get("username"), store.get("password"));
+    let access_token = await getAccessToken(store.get("username"), store.get("password"), "create_rooms");
 
     await fetch(`${API_URL}/api/chatroom/new`, {
         method: "POST",
