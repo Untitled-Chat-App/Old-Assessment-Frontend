@@ -14,12 +14,14 @@
         <h1>Create new room</h1>
         <form>
             <label for="room_name">Room Name:</label><br>
-            <input class="text-input" type="text" id="room_name" name="room_name" placeholder="Rickrollers" required><br>
+            <input class="text-input" type="text" id="room_name" name="room_name" placeholder="Rickrollers"
+                required><br>
 
             <br>
 
             <label for="description">Room Description:</label><br>
-            <input class="text-input" type="text" id="description" name="description" placeholder="For people who like rickrolling"><br><br>
+            <input class="text-input" type="text" id="description" name="description"
+                placeholder="For people who like rickrolling"><br><br>
 
             <input class="submit-button" type="submit" value="Create Room">
         </form>
@@ -29,6 +31,13 @@
         const { ipcRenderer } = require("electron");
 
         const form = document.querySelector("form")
+
+        function joinRoom(data) {
+            let join = confirm("Auto join room?")
+            if (join) {
+                ipcRenderer.invoke("join-new-room:join_room", data[2])
+            }
+        }
 
         function submition(event) {
             event.preventDefault();
@@ -47,7 +56,10 @@
 
             ipcRenderer.invoke("new-room-create:create_room", data).then((data) => {
                 const alertP = document.getElementById("alert")
-                alertP.innerHTML = data
+                alertP.style.color = data[0]
+                alertP.innerHTML = data[1]
+                
+                joinRoom(data)
             });
 
         }

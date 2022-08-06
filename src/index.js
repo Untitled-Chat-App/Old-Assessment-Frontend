@@ -183,8 +183,17 @@ ipcMain.handle("join-new-room:join_room", async function (event, room_id) {
     if (room === null || room === undefined) {
         return "Room not found (lil' dif in skill level ngl)";
     }
-    enterRoomIDWindow.close();
-    enterRoomIDWindow = null;
+    try {
+        enterRoomIDWindow.close();
+        enterRoomIDWindow = null;
+    }
+    catch (e) {}
+
+    try {
+        newRoomWindow.close();
+        newRoomWindow = null;
+    }
+    catch (e) {}
 
     connect_to_room(room.room_id);
 });
@@ -220,5 +229,8 @@ ipcMain.handle("new-room-create:create_room", async function (event, data) {
     let room_id;
     room = await createNewRoom(data.room_name, data.room_description);
     room_id = room.room_id;
-    return `Room created successfully: ${room_id}`;
+    if (room_id === undefined || room_id === null) {
+        return ["red", "failed to create room"]
+    }
+    return ["green", `Room created successfully: ${room_id}`, room_id];
 });
