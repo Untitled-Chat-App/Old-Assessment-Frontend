@@ -1,34 +1,49 @@
 @import url("./fonts.css");
 
+body {
+    background-color: #F9F8F4;
+}
+.logo {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+}
+
 .login-form {
     justify-content: center;
     text-align: center;
     align-items: center;
     background-color: rgb(55, 57, 62);
-    width: 55vw;
+    width: 55.5vw;
     height: auto;
     margin: auto;
     padding: 2rem;
-    border-radius: 0.25rem;
+    border-radius: 1rem;
     box-shadow: 0px 3px 15px rgba(0,0,0,0.2);
     overflow: hidden;
 }
 
 .login-form h1 {
+    justify-content: center;
+    text-align: center;
+    align-items: center;
     font-family: aileron;
-    font-size: 3vw;
+    font-size: 2rem;
     color: white;
 }
 
 .login-form form label {
     font-family: taro;
     color: white;
+    justify-content: center;
+    text-align: left;
+    align-items: center;
 }
 
 .login-form form .text-input {
     border-radius: 0.25rem;
     width: 45vw;
-    background-color: black;
+    background-color: rgb(31	33	36	);
     color: white;
     font-family: aileron-light;
     border-width: 0;
@@ -37,10 +52,36 @@
 }
 
 .login-form form .submit-button {
-    background-color: white;
+    
+    text-align: center;
+    background-color: rgb(201, 71, 56);
+    color: white;
     border-radius: 0.25rem;
     cursor: pointer;
     padding: 1rem;
     width: 48vw;
     border-width: 0;
+}
+
+#signup-link {
+    background-color: rgb(201, 71, 56);
+    border: none;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    position: absolute;
+    right: 20px;
+    top: 20px;
+    border-radius: 10px;
+    box-shadow: 0px 1px 5px rgba(0,0,0,0.2);
+    font-size: 16px;
+    transition-duration: 0.2s;
+
+}
+
+#signup-link:hover {
+    background-color: rgb(224, 79, 63);
+    cursor: pointer;
 }

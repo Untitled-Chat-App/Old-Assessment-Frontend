@@ -8,24 +8,26 @@
 </head>
 
 <body>
+    <button id="signup-link" onclick="signUpInstead()">Sign Up</button>
+    <img src="../assets/images/nobg_logo.png" width="200px" height="auto" class="logo">
     <div style="height: 15vh;"></div>
     <div class="login-form">
         <p id="alert" style="color: red;"></p>
-        <h1>Login to the app</h1>
+        <h1>Welcome back!</h1><br>
         <form>
-            <label for="username">Username:</label><br>
+            <label for="username">Username:</label><br><br>
             <input class="text-input" type="text" id="username" name="username" placeholder="CoolUser" required><br>
 
             <br>
 
-            <label for="password">Last name:</label><br>
+            <label for="password" align="left">Last name:</label><br><br>
             <input class="text-input" type="password" id="password" name="password" placeholder="password123" required><br><br>
 
-            <input class="submit-button" type="submit" value="Submit">
+            <input class="submit-button" type="submit" value="Login">
 
             <br><br>
 
-            <button id="signup-link" onclick="signUpInstead()">Don't have an account? Sign Up instead</button>
+            
         </form>
     </div>
 
