@@ -119,6 +119,14 @@ ipcMain.on("login-or-join:index", function (event) {
     loginWindow = createLoginWindow();
 });
 
+ipcMain.on("go-back-signup:signup", function (event) {
+    try {
+        signupWindow.close()
+    } catch {}
+    signupWindow = null;
+    loginWindow = createLoginWindow();
+});
+
 // When someone logs in
 ipcMain.handle("new-login:login", async function (event, data) {
     let token = await getAccessToken(data.username, data.password);
@@ -234,3 +242,18 @@ ipcMain.handle("new-room-create:create_room", async function (event, data) {
     }
     return ["green", `Room created successfully: ${room_id}`, room_id];
 });
+
+ipcMain.on("go-back-to-normal:room", async function (event, data) {
+    try {
+        roomWindow.close()
+    } catch {}
+    
+    roomWindow = null 
+
+    let isFirstTimeUser = await checkIfFirstTimeUser();
+    if (isFirstTimeUser) {
+        signedInWindow = createSignedInWindow();
+    } else {
+        firstTimeUserPageWindow = firstTimeUserPage();
+    }
+})

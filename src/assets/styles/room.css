@@ -21,7 +21,7 @@ body {
 .room-title h1 {
     font-family: aileron;
     font-size: 3vw;
-    padding-left: 3rem;
+    padding-left: 2rem;
     word-wrap: break-word;
     color: white;
     margin: 0;
@@ -74,7 +74,7 @@ body {
     background-color: rgb(65, 68, 74);
     border-width: 0;
     cursor: pointer;
-    color: rgb(197, 84, 71);
+    color: rgb(201, 71, 56);
 }
 
 .message-send-div button:hover {
@@ -82,9 +82,6 @@ body {
     border-width: 0;
     cursor: pointer;
 }
-
-
-
 
 .message-you {
     background-color: rgb(197, 84, 71);
@@ -139,4 +136,28 @@ body {
 .message-other .message-content {
     color: lightgray;
     font-family: aileron-light;
+}
+
+#home-button {
+    background-color: rgb(201, 71, 56);
+    border: none;
+    color: white;
+    padding: 5px 25px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    left: 1rem;
+    position: relative;
+    border-radius: 10px;
+    box-shadow: 0px 1px 5px rgba(0,0,0,0.2);
+    font-size: 16px;
+    transition-duration: 0.3s;
+}
+#home-button i {
+    scale: 1.25;
+}
+
+#home-button:hover {
+    cursor: pointer;
+    background-color: rgb(188, 72, 59);
 }

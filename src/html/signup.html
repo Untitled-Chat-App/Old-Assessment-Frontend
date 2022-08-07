@@ -9,6 +9,7 @@
 
 <body>
     <div style="height: 15vh;"></div>
+    <button id="signup-link" onclick="goBack()">Login</button>
     <img src="../assets/images/nobg_logo.png" width="200px" height="auto" class="logo">
     <div class="login-form">
         <p id="alert" style="color: red;"></p>
@@ -63,6 +64,10 @@
         }
 
         form.addEventListener("submit", submition);
+
+        function goBack(event) {
+            ipcRenderer.send("go-back-signup:signup");
+        }
     </script>
 </body>
 

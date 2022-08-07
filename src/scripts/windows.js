@@ -119,8 +119,8 @@ function createEnterRoomIDWindow() {
             contextIsolation: false,
             nodeIntegration: true,
         },
-        width: 500,
-        height: 285,
+        width: 570,
+        height: 300,
     });
 
     // load in index.html file

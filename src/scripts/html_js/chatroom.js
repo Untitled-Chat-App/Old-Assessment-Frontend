@@ -17,6 +17,11 @@ function start(access_token) {
         `wss://chatapi.fusionsid.xyz/api/ws/chatroom?access_token=${access_token}&room_id=${room_data.room_id}`
     );
 
+    ws.onerror = function (event) {
+        alert("Failed to connect to websocket")
+        ipcRenderer.send("go-back-to-normal:room")
+    }
+
     ws.onmessage = function (event) {
         let msg = event.data;
 
@@ -139,6 +144,10 @@ function start(access_token) {
 
     const form = document.querySelector("#message-send-div");
     form.addEventListener("submit", sendMessage);
+}
+
+function goBackHome() {
+    ipcRenderer.send("go-back-to-normal:room")
 }
 
 /*
