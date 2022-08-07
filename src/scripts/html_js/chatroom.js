@@ -1,10 +1,11 @@
 const { ipcRenderer } = require("electron");
-var user, access_token, room_data;
+var user, access_token, room_data, current_user;
 
 ipcRenderer.invoke("gimme-connection:room").then((data) => {
     user = data.user;
     access_token = data.access_token;
     room_data = data.room_data;
+    current_user = data.user
 
     const title = document.querySelector("#room-title-text");
     title.innerHTML = room_data.room_name;
@@ -18,11 +19,29 @@ function start(access_token) {
 
     ws.onmessage = function (event) {
         let msg = event.data;
-        var messages = document.getElementById("messages");
 
+        // Convert ws response to js object
+        while (typeof msg !== "object") {
+            msg = JSON.parse(msg);
+        }
+        try {
+            user = msg["message_author"];
+        }
+        catch (e) {
+
+        }
+
+        var messages = document.getElementById("messages");
+        
         // The div:
         var message = document.createElement("div");
-        message.className = "message";
+        try {
+            if (user["username"] === current_user["username"]) {
+                message.className = "message-you";
+            } else {
+                message.className = "message-other";
+            }
+        } catch {message.className = "message-other";}
 
         var message_author_span = document.createElement("span");
         var message_content_span = document.createElement("span");
@@ -44,47 +63,54 @@ function start(access_token) {
         var msgTime = document.createTextNode(current_time);
         message_time_span.appendChild(msgTime);
 
-        // Convert ws response to js object
-        while (typeof msg !== "object") {
-            msg = JSON.parse(msg);
-        }
 
         if (msg["event"] !== undefined) {
             // On Events
             if (msg["event"] === "User Disconnect") {
                 user = JSON.parse(msg["user"]);
                 var what_happened = document.createTextNode(`${user["username"]} left the chat`);;
-                message_content_span.style.color = "red";
-                message_content_span.appendChild(what_happened);
+                message_author_span.style.color = "red";
+                message_author_span.appendChild(what_happened);
             }
             if (msg["event"] === "User Join") {
                 user = JSON.parse(msg["user"]);
                 var what_happened = document.createTextNode(`${user["username"]} joined the chat`)
-                message_content_span.style.color = "red";
-                message_content_span.appendChild(what_happened);
+                message_author_span.style.color = "red";
+                message_author_span.appendChild(what_happened);
             }
+            var br = document.createElement("br");
+            message.appendChild(br);
+            message.appendChild(message_author_span);
+            message.appendChild(message_time_span);
         } else {
             // On normal message:
-            var msgAuthor = document.createTextNode(
-                msg["message_author"]["username"]
-            );
+            if (message.className === "message-you") {
+                var msgAuthor = document.createTextNode(
+                    "You"
+                );
+            } else {
+                var msgAuthor = document.createTextNode(
+                    msg["message_author"]["username"]
+                );
+            }
             var msgContent = document.createTextNode(msg["messsage_content"]);
 
             message_content_span.appendChild(msgContent);
             message_author_span.appendChild(msgAuthor);
+            
+            message.appendChild(message_author_span);
+            var br = document.createElement("br");
+            message.appendChild(br);
+            var br = document.createElement("br");
+            message.appendChild(br);
+            message.appendChild(message_content_span);
+            var br = document.createElement("br");
+            message.appendChild(br);
+            var br = document.createElement("br");
+            message.appendChild(br);
+            message.appendChild(message_time_span);
         }
 
-        message.appendChild(message_author_span);
-        var br = document.createElement("br");
-        message.appendChild(br);
-        var br = document.createElement("br");
-        message.appendChild(br);
-        message.appendChild(message_content_span);
-        var br = document.createElement("br");
-        message.appendChild(br);
-        var br = document.createElement("br");
-        message.appendChild(br);
-        message.appendChild(message_time_span);
 
         messages.appendChild(message);
 
