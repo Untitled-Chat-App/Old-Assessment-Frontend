@@ -140,6 +140,8 @@ ipcMain.handle("new-login:login", async function (event, data) {
             title: "Failed to login",
             body: "Incorrect username or password (skill issue)",
         }).show()
+        
+        return "Incorrect username or password (skill issue)";
     }
 
     store.set("username", data.username);

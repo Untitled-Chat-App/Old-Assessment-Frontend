@@ -6,9 +6,9 @@
   "main": "src/index.js",
   "scripts": {
     "start": "electron .",
-    "build-osx": "electron-packager ./ untitled-chat-app --overwrite --platform=darwin --prune=true --out ./dist/mac --icon ./src/assets/images/chat_logo.icns",
-    "build-windows": "electron-packager ./ untitled-chat-app --overwrite --platform=win32 --arch=x64 --icon=./src/assets/images/logos/chat_logo.ico --prune=true --out=./dist/windows",
-    "build-linux": "electron-packager ./ untitled-chat-app --overwrite --platform=linux --arch=x64 --prune=true --out ./dist/linux --icon ./src/assets/images/chat_logo.icns"
+    "build-osx": "electron-packager ./ untitled-chat-app --overwrite --platform=darwin --prune=true --out ./dist/mac --icon ./src/assets/images/logos/chat_logo.icns",
+    "build-windows": "electron-packager ./ untitled-chat-app --overwrite --platform=win32 --arch=x64 --icon=./src/assets/images/logos/chat_logo.icns --prune=true --out=./dist/windows",
+    "build-linux": "electron-packager ./ untitled-chat-app --overwrite --platform=linux --arch=x64 --prune=true --out ./dist/linux --icon ./src/assets/images/logos/chat_logo.icns"
   },
   "keywords": [],
   "author": {
