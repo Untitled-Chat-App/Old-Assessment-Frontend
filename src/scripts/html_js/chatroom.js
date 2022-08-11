@@ -113,7 +113,7 @@ function start(access_token) {
                 );
 
                 let ipc_data = {
-                    title: msgAuthor.textContent,
+                    title: `${msgAuthor.textContent} (${room_data.room_name})`,
                     body: msgContent.textContent
                 }
                 ipcRenderer.send("new-chat-notif:room", ipc_data);
