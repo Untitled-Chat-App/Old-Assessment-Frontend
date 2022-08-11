@@ -92,7 +92,9 @@ app.on("ready", async () => {
         firstTimeUserPageWindow = firstTimeUserPage();
     }
     const clientId = "1007041141029474424";
-    rpc.login({ clientId }).catch(console.error);
+    try {
+        rpc.login({ clientId }).catch(console.error);
+    } catch {}
 
 });
 
@@ -119,9 +121,12 @@ app.on("activate", async () => {
 
 // When someone hits login button with info
 ipcMain.on("login-or-join:index", function (event) {
-    firstTimeUserPageWindow.close();
-    firstTimeUserPageWindow = null;
-    loginWindow = createLoginWindow();
+    try {
+        firstTimeUserPageWindow.close();
+        firstTimeUserPageWindow = null;
+        loginWindow = createLoginWindow();
+    }
+    catch {}
 });
 
 ipcMain.on("go-back-signup:signup", function (event) {
@@ -266,4 +271,11 @@ ipcMain.on("go-back-to-normal:room", async function (event, data) {
     } else {
         firstTimeUserPageWindow = firstTimeUserPage();
     }
+})
+
+ipcMain.on("new-chat-notif:room", function (event, data) {
+    new Notification({
+        title: data.title,
+        body: data.body,
+    }).show()
 })

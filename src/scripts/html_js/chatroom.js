@@ -76,12 +76,24 @@ function start(access_token) {
                 var what_happened = document.createTextNode(`${user["username"]} left the chat`);;
                 message_author_span.style.color = "red";
                 message_author_span.appendChild(what_happened);
+
+                let ipc_data = {
+                    title: room_data.room_name,
+                    body: `${user["username"]} left the chat`
+                }
+                ipcRenderer.send("new-chat-notif:room", ipc_data);
             }
             if (msg["event"] === "User Join") {
                 user = JSON.parse(msg["user"]);
                 var what_happened = document.createTextNode(`${user["username"]} joined the chat`)
                 message_author_span.style.color = "red";
                 message_author_span.appendChild(what_happened);
+
+                let ipc_data = {
+                    title: room_data.room_name,
+                    body: `${user["username"]} joined the chat`
+                }
+                ipcRenderer.send("new-chat-notif:room", ipc_data);
             }
             var br = document.createElement("br");
             message.appendChild(br);
@@ -89,6 +101,8 @@ function start(access_token) {
             message.appendChild(message_time_span);
         } else {
             // On normal message:
+            var msgContent = document.createTextNode(msg["messsage_content"]);
+
             if (message.className === "message-you") {
                 var msgAuthor = document.createTextNode(
                     "You"
@@ -97,9 +111,14 @@ function start(access_token) {
                 var msgAuthor = document.createTextNode(
                     msg["message_author"]["username"]
                 );
-            }
-            var msgContent = document.createTextNode(msg["messsage_content"]);
 
+                let ipc_data = {
+                    title: msgAuthor.textContent,
+                    body: msgContent.textContent
+                }
+                ipcRenderer.send("new-chat-notif:room", ipc_data);
+            }
+            
             message_content_span.appendChild(msgContent);
             message_author_span.appendChild(msgAuthor);
             
