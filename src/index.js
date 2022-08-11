@@ -9,6 +9,7 @@ const {
     ipcMain,
     ipcRenderer,
     contextBridge,
+    Notification
 } = require("electron");
 const rpc = require("./scripts/discord_presence")
 
@@ -135,7 +136,10 @@ ipcMain.on("go-back-signup:signup", function (event) {
 ipcMain.handle("new-login:login", async function (event, data) {
     let token = await getAccessToken(data.username, data.password);
     if (token === undefined) {
-        return "Incorrect username or password (skill issue)";
+        new Notification({
+            title: "Failed to login",
+            body: "Incorrect username or password (skill issue)",
+        }).show()
     }
 
     store.set("username", data.username);

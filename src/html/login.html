@@ -21,18 +21,19 @@
             <br>
 
             <label for="password" align="left">Last name:</label><br><br>
-            <input class="text-input" type="password" id="password" name="password" placeholder="password123" required><br><br>
+            <input class="text-input" type="password" id="password" name="password" placeholder="password123"
+                required><br><br>
 
             <input class="submit-button" type="submit" value="Login">
 
             <br><br>
 
-            
+
         </form>
     </div>
 
     <script>
-        const { ipcRenderer } = require("electron");
+        const { ipcRenderer, Notification } = require("electron");
 
         const form = document.querySelector("form")
 
