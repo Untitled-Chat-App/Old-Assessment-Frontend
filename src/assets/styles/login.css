@@ -1,5 +1,6 @@
 @import url("./fonts.css");
 
+
 body {
     background-color: #F9F8F4;
 }
@@ -84,4 +85,27 @@ body {
 #signup-link:hover {
     background-color: rgb(224, 79, 63);
     cursor: pointer;
+}
+
+#home-button {
+    background-color: rgb(201, 71, 56);
+    border: none;
+    color: white;
+    padding: 10px 25px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    position: relative;
+    border-radius: 10px;
+    box-shadow: 0px 1px 5px rgba(0,0,0,0.2);
+    font-size: 16px;
+    transition-duration: 0.3s;
+}
+#home-button i {
+    scale: 1.25;
+}
+
+#home-button:hover {
+    cursor: pointer;
+    background-color: rgb(188, 72, 59);
 }

@@ -5,9 +5,11 @@
     <meta charset="UTF-8">
     <title>Login</title>
     <link rel="stylesheet" href="../assets/styles/login.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 
 <body>
+    <button id="home-button" onclick="goBackHome()">Back to home <i class="fa fa-home"></i></button>
     <div style="height: 15vh;"></div>
     <div class="login-form">
         <p id="alert" style="color: red;"></p>
@@ -58,8 +60,8 @@
                 const alertP = document.getElementById("alert")
                 alertP.style.color = data[0]
                 alertP.innerHTML = data[1]
-                
-                if (data[2] === undefined || data[2] === null){
+
+                if (data[2] === undefined || data[2] === null) {
 
                 } else {
                     joinRoom(data)
@@ -69,6 +71,11 @@
         }
 
         form.addEventListener("submit", submition);
+
+        function goBackHome() {
+            ipcRenderer.send("go-back-to-normal:room")
+        }
+
     </script>
 </body>
 

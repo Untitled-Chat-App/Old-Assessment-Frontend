@@ -10,6 +10,7 @@ const {
     ipcRenderer,
     contextBridge,
 } = require("electron");
+const rpc = require("./scripts/discord_presence")
 
 // Local imports
 const {
@@ -89,6 +90,9 @@ app.on("ready", async () => {
     } else {
         firstTimeUserPageWindow = firstTimeUserPage();
     }
+    const clientId = "1007041141029474424";
+    rpc.login({ clientId }).catch(console.error);
+
 });
 
 // if all windows are closed, close app. But since mac is special don't close it.

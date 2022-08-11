@@ -1,19 +1,14 @@
 {
-  "name": "frontend",
-  "productName": "frontend",
+  "name": "untitled-chat",
+  "productName": "Untitled-Chat",
   "version": "1.0.0",
-  "description": "My Electron application description",
+  "description": "Better chat app since discord has a **skill** issue",
   "main": "src/index.js",
   "scripts": {
-    "start": "electron-forge start",
-    "package": "electron-forge package",
-    "make": "electron-forge make",
-    "publish": "electron-forge publish",
-    "lint": "echo \"No linting configured\"",
-    "build-css": "tailwindcss build -i src/assets/tailwindcss/input.css -o src/assets/tailwindcss/styles.css --watch",
-    "build-osx": "electron-packager ./ untitled-chat-app --platform darwin --out ./dist/mac --overwrite",
-    "build-windows": "electron-packager ./ untitled-chat-app --overwrite --platform=win32 --prune=true --out ./dist/windows",
-    "build-linux": "electron-packager ./ untitled-chat-app --overwrite --platform=linux --arch=x64 --prune=true --out ./dist/linux"
+    "start": "electron .",
+    "build-osx": "electron-packager ./ untitled-chat-app --overwrite --platform=darwin --prune=true --out ./dist/mac --icon ./src/assets/images/chat_logo.icns",
+    "build-windows": "electron-packager ./ untitled-chat-app --overwrite --platform=win32 --arch=x64 --icon=./src/assets/images/logos/chat_logo.ico --prune=true --out=./dist/windows",
+    "build-linux": "electron-packager ./ untitled-chat-app --overwrite --platform=linux --arch=x64 --prune=true --out ./dist/linux --icon ./src/assets/images/chat_logo.icns"
   },
   "keywords": [],
   "author": {
@@ -21,50 +16,15 @@
     "email": "siddheshadsv@icloud.com"
   },
   "license": "MIT",
-  "config": {
-    "forge": {
-      "packagerConfig": {},
-      "makers": [
-        {
-          "name": "@electron-forge/maker-squirrel",
-          "config": {
-            "name": "frontend"
-          }
-        },
-        {
-          "name": "@electron-forge/maker-zip",
-          "platforms": [
-            "darwin"
-          ]
-        },
-        {
-          "name": "@electron-forge/maker-deb",
-          "config": {}
-        },
-        {
-          "name": "@electron-forge/maker-rpm",
-          "config": {}
-        }
-      ]
-    }
-  },
   "dependencies": {
+    "discord-rpc": "^4.0.1",
     "dotenv": "^16.0.1",
+    "electron": "^20.0.2",
     "electron-packager": "^15.5.1",
     "electron-squirrel-startup": "^1.0.0",
-    "electron-store": "^8.0.2",
+    "electron-store": "^8.1.0",
     "node-fetch": "^2.6.1",
     "node-rsa": "^1.1.1",
-    "pg": "^8.7.3",
-    "ws": "^8.8.0"
-  },
-  "devDependencies": {
-    "@electron-forge/cli": "^6.0.0-beta.64",
-    "@electron-forge/maker-deb": "^6.0.0-beta.64",
-    "@electron-forge/maker-rpm": "^6.0.0-beta.64",
-    "@electron-forge/maker-squirrel": "^6.0.0-beta.64",
-    "@electron-forge/maker-zip": "^6.0.0-beta.64",
-    "electron": "19.0.8",
-    "tailwindcss": "^3.1.6"
+    "ws": "^8.8.1"
   }
 }
