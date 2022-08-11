@@ -12,22 +12,27 @@ async function setActivity() {
     }
 
     rpc.setActivity({
-        details: `Using the best chat app`,
-        state: "This app will never give you up",
+        details: "This app is never gonna give you up",
+        state: "It will however kill me with bugs and brain damage",
         startTimestamp,
         instance: false,
         largeImageKey: "chat_logo_small_square",
-        largeImageText: "Shitty lgo"
+        largeImageText: "Shitty logo",
+        buttons: [
+            {
+                label: "Github / Code",
+                url: "https://github.com/Untitled-Chat-App",
+            },
+        ],
     });
 }
 
 rpc.on("ready", () => {
     setActivity();
 
-    // activity can only be set every 15 seconds
     setInterval(() => {
         setActivity();
     }, 15e3);
 });
 
-module.exports = rpc
+module.exports = rpc;
