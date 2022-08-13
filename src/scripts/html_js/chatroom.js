@@ -13,7 +13,7 @@ ipcRenderer.invoke("gimme-connection:room").then((data) => {
 
     let messages_data = [];
     fetch(
-        `https://chatapi.fusionsid.xyz/api/chatroom/get_messages?room_id=${room_data.room_id}`,
+        `https://chatapi.fusionsid.xyz/api/chatroom/get_messages?room_id=${room_data.room_id}&get_usernames=true`,
         {
             method: "GET",
             headers: {
@@ -24,27 +24,68 @@ ipcRenderer.invoke("gimme-connection:room").then((data) => {
     )
         .then((response) => response.json())
         .then((json_data) => {
-            json_data = json_data.reverse()
+            var messages = document.getElementById("messages");
             json_data.forEach(function (item, index) {
-                var messages = document.getElementById("messages");
-
                 var message = document.createElement("div");
+
+                var message_author_span = document.createElement("span");
+                message_author_span.className = "message-author";
+                try {
+                    if (item["message_author_id"] === current_user["user_id"]) {
+                        message.className = "message-you";
+                    } else {
+                        message.className = "message-other";
+                    }
+                } catch {
+                    message.className = "message-other";
+                }
+                if (message.className === "message-you") {
+                    var msgAuthor = document.createTextNode("You");
+                } else {
+                    var msgAuthor = document.createTextNode(
+                        item["message_author_username"]
+                    );
+                }
+                message_author_span.appendChild(msgAuthor);
+                message.appendChild(message_author_span);
+                var br = document.createElement("br");
+                message.appendChild(br);
+                var br = document.createElement("br");
+                message.appendChild(br);
+
+                // content
                 var message_content_span = document.createElement("span");
+                message_content_span.className = "message-content";
                 message_content_span.className = "message-content";
                 var msgContent = document.createTextNode(
                     item["message_content"]
                 );
-                message_content_span.appendChild(msgContent);
+                message_content_span.prepend(msgContent);
                 message.appendChild(message_content_span);
-                messages.appendChild(message);
-                message.className = "message-other";
+                var br = document.createElement("br");
+                message.appendChild(br);
+                var br = document.createElement("br");
+                message.appendChild(br);
 
-                const scrollIntoViewOptions = {
-                    behavior: "smooth",
-                    block: "center",
-                };
-                message.scrollIntoView(scrollIntoViewOptions);
+                // time
+                var message_time_span = document.createElement("span");
+                message_time_span.className = "message-time";
+                let created_at = new Intl.DateTimeFormat("default", {
+                    hour12: true,
+                    hour: "numeric",
+                    minute: "numeric",
+                }).format(item["message_created_at"]);
+                var msgTime = document.createTextNode(created_at);
+                message_time_span.appendChild(msgTime);
+                message.appendChild(message_time_span);
+
+                // Prepend to messages
+                messages.prepend(message);
             });
+            var messages = document.getElementById("messages");
+            var last_message = messages.lastChild
+            const scrollIntoViewOptions = { behavior: "smooth", block: "center" };
+            last_message.scrollIntoView(scrollIntoViewOptions);
         });
 });
 
