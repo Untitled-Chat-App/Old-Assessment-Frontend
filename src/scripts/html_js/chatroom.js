@@ -70,11 +70,12 @@ ipcRenderer.invoke("gimme-connection:room").then((data) => {
                 // time
                 var message_time_span = document.createElement("span");
                 message_time_span.className = "message-time";
+                let date = new Date(item["message_created_at"] * 1000);
                 let created_at = new Intl.DateTimeFormat("default", {
                     hour12: true,
                     hour: "numeric",
                     minute: "numeric",
-                }).format(item["message_created_at"]);
+                }).format(date);
                 var msgTime = document.createTextNode(created_at);
                 message_time_span.appendChild(msgTime);
                 message.appendChild(message_time_span);
@@ -83,8 +84,11 @@ ipcRenderer.invoke("gimme-connection:room").then((data) => {
                 messages.prepend(message);
             });
             var messages = document.getElementById("messages");
-            var last_message = messages.lastChild
-            const scrollIntoViewOptions = { behavior: "smooth", block: "center" };
+            var last_message = messages.lastChild;
+            const scrollIntoViewOptions = {
+                behavior: "smooth",
+                block: "center",
+            };
             last_message.scrollIntoView(scrollIntoViewOptions);
         });
 });
