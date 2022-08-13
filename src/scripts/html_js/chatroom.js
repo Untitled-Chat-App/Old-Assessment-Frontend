@@ -5,11 +5,47 @@ ipcRenderer.invoke("gimme-connection:room").then((data) => {
     user = data.user;
     access_token = data.access_token;
     room_data = data.room_data;
-    current_user = data.user
+    current_user = data.user;
 
     const title = document.querySelector("#room-title-text");
     title.innerHTML = room_data.room_name;
     start(access_token);
+
+    let messages_data = [];
+    fetch(
+        `https://chatapi.fusionsid.xyz/api/chatroom/get_messages?room_id=${room_data.room_id}`,
+        {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${access_token}`,
+            },
+        }
+    )
+        .then((response) => response.json())
+        .then((json_data) => {
+            json_data = json_data.reverse()
+            json_data.forEach(function (item, index) {
+                var messages = document.getElementById("messages");
+
+                var message = document.createElement("div");
+                var message_content_span = document.createElement("span");
+                message_content_span.className = "message-content";
+                var msgContent = document.createTextNode(
+                    item["message_content"]
+                );
+                message_content_span.appendChild(msgContent);
+                message.appendChild(message_content_span);
+                messages.appendChild(message);
+                message.className = "message-other";
+
+                const scrollIntoViewOptions = {
+                    behavior: "smooth",
+                    block: "center",
+                };
+                message.scrollIntoView(scrollIntoViewOptions);
+            });
+        });
 });
 
 function start(access_token) {
@@ -18,9 +54,9 @@ function start(access_token) {
     );
 
     ws.onerror = function (event) {
-        alert("Failed to connect to websocket")
-        ipcRenderer.send("go-back-to-normal:room")
-    }
+        alert("Failed to connect to websocket");
+        ipcRenderer.send("go-back-to-normal:room");
+    };
 
     ws.onmessage = function (event) {
         let msg = event.data;
@@ -31,13 +67,10 @@ function start(access_token) {
         }
         try {
             user = msg["message_author"];
-        }
-        catch (e) {
-
-        }
+        } catch (e) {}
 
         var messages = document.getElementById("messages");
-        
+
         // The div:
         var message = document.createElement("div");
         try {
@@ -46,7 +79,9 @@ function start(access_token) {
             } else {
                 message.className = "message-other";
             }
-        } catch {message.className = "message-other";}
+        } catch {
+            message.className = "message-other";
+        }
 
         var message_author_span = document.createElement("span");
         var message_content_span = document.createElement("span");
@@ -68,31 +103,34 @@ function start(access_token) {
         var msgTime = document.createTextNode(current_time);
         message_time_span.appendChild(msgTime);
 
-
         if (msg["event"] !== undefined) {
             // On Events
             if (msg["event"] === "User Disconnect") {
                 user = JSON.parse(msg["user"]);
-                var what_happened = document.createTextNode(`${user["username"]} left the chat`);;
+                var what_happened = document.createTextNode(
+                    `${user["username"]} left the chat`
+                );
                 message_author_span.style.color = "red";
                 message_author_span.appendChild(what_happened);
 
                 let ipc_data = {
                     title: room_data.room_name,
-                    body: `${user["username"]} left the chat`
-                }
+                    body: `${user["username"]} left the chat`,
+                };
                 ipcRenderer.send("new-chat-notif:room", ipc_data);
             }
             if (msg["event"] === "User Join") {
                 user = JSON.parse(msg["user"]);
-                var what_happened = document.createTextNode(`${user["username"]} joined the chat`)
+                var what_happened = document.createTextNode(
+                    `${user["username"]} joined the chat`
+                );
                 message_author_span.style.color = "red";
                 message_author_span.appendChild(what_happened);
 
                 let ipc_data = {
                     title: room_data.room_name,
-                    body: `${user["username"]} joined the chat`
-                }
+                    body: `${user["username"]} joined the chat`,
+                };
                 ipcRenderer.send("new-chat-notif:room", ipc_data);
             }
             var br = document.createElement("br");
@@ -104,9 +142,7 @@ function start(access_token) {
             var msgContent = document.createTextNode(msg["messsage_content"]);
 
             if (message.className === "message-you") {
-                var msgAuthor = document.createTextNode(
-                    "You"
-                );
+                var msgAuthor = document.createTextNode("You");
             } else {
                 var msgAuthor = document.createTextNode(
                     msg["message_author"]["username"]
@@ -114,14 +150,14 @@ function start(access_token) {
 
                 let ipc_data = {
                     title: `${msgAuthor.textContent} (${room_data.room_name})`,
-                    body: msgContent.textContent
-                }
+                    body: msgContent.textContent,
+                };
                 ipcRenderer.send("new-chat-notif:room", ipc_data);
             }
-            
+
             message_content_span.appendChild(msgContent);
             message_author_span.appendChild(msgAuthor);
-            
+
             message.appendChild(message_author_span);
             var br = document.createElement("br");
             message.appendChild(br);
@@ -134,7 +170,6 @@ function start(access_token) {
             message.appendChild(br);
             message.appendChild(message_time_span);
         }
-
 
         messages.appendChild(message);
 
@@ -166,7 +201,7 @@ function start(access_token) {
 }
 
 function goBackHome() {
-    ipcRenderer.send("go-back-to-normal:room")
+    ipcRenderer.send("go-back-to-normal:room");
 }
 
 /*
@@ -182,3 +217,5 @@ How it looks
     <span class="message-time"></span>
 </div>
 */
+
+async function getOldMessages() {}

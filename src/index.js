@@ -225,7 +225,8 @@ ipcMain.handle("join-new-room:join_room", async function (event, room_id) {
 async function connect_to_room(room_id) {
     let access_token = await getAccessToken(
         store.get("username"),
-        store.get("password")
+        store.get("password"),
+        "get_old_messages"
     );
 
     roomWindow = createRoomWindow();
