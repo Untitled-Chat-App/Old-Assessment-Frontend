@@ -206,6 +206,9 @@ ipcMain.handle("join-new-room:join_room", async function (event, room_id) {
     if (room === null || room === undefined) {
         return "Room not found (lil' dif in skill level ngl)";
     }
+    
+    connect_to_room(room.room_id);
+
     try {
         enterRoomIDWindow.close();
         enterRoomIDWindow = null;
@@ -217,8 +220,6 @@ ipcMain.handle("join-new-room:join_room", async function (event, room_id) {
         newRoomWindow = null;
     }
     catch (e) {}
-
-    connect_to_room(room.room_id);
 });
 
 // The real stuff

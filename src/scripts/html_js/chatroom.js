@@ -10,8 +10,7 @@ ipcRenderer.invoke("gimme-connection:room").then((data) => {
     const title = document.querySelector("#room-title-text");
     title.innerHTML = room_data.room_name;
     start(access_token);
-
-    let messages_data = [];
+    
     fetch(
         `https://chatapi.fusionsid.xyz/api/chatroom/get_messages?room_id=${room_data.room_id}&get_usernames=true`,
         {

@@ -8,7 +8,8 @@
     "start": "electron .",
     "build-osx": "electron-packager ./ untitled-chat-app --overwrite --platform=darwin --prune=true --out ./dist/mac --icon ./src/assets/images/logos/chat_logo.icns",
     "build-windows": "electron-packager ./ untitled-chat-app --overwrite --platform=win32 --arch=x64 --icon=./src/assets/images/logos/chat_logo.icns --prune=true --out=./dist/windows",
-    "build-linux": "electron-packager ./ untitled-chat-app --overwrite --platform=linux --arch=x64 --prune=true --out ./dist/linux --icon ./src/assets/images/logos/chat_logo.icns"
+    "build-linux": "electron-packager ./ untitled-chat-app --overwrite --platform=linux --arch=x64 --prune=true --out ./dist/linux --icon ./src/assets/images/logos/chat_logo.icns",
+    "build-linuxx": "electron-builder --x64 --linux"
   },
   "keywords": [],
   "author": {
@@ -19,12 +20,25 @@
   "dependencies": {
     "discord-rpc": "^4.0.1",
     "dotenv": "^16.0.1",
-    "electron": "^20.0.2",
     "electron-packager": "^15.5.1",
     "electron-squirrel-startup": "^1.0.0",
     "electron-store": "^8.1.0",
     "node-fetch": "^2.6.1",
     "node-rsa": "^1.1.1",
     "ws": "^8.8.1"
+  },
+  "devDependencies": {
+    "electron": "^20.0.2",
+    "electron-builder": "^23.3.3"
+  },
+  "build": {
+    "appId": "com.fusionsid.untitledchat",
+    "linux": {
+      "target": [
+        "pacman", "snap"
+      ],
+      "icon": "./dist/256x256.png",
+      "category": "Chat"
+    }
   }
 }
