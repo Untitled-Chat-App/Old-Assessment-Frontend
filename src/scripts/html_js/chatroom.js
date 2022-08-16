@@ -7,12 +7,10 @@ ipcRenderer.invoke("gimme-connection:room").then((data) => {
     room_data = data.room_data;
     current_user = data.user;
 
-    const title = document.querySelector("#room-title-text");
-    title.innerHTML = room_data.room_name;
     start(access_token);
-    
+
     fetch(
-        `https://chatapi.fusionsid.xyz/api/chatroom/get_messages?room_id=${room_data.room_id}&get_usernames=true`,
+        `https://chatapi.fusionsid.xyz/api/chatroom/get_messages?room_id=${room_data.room_id}`,
         {
             method: "GET",
             headers: {
@@ -90,6 +88,9 @@ ipcRenderer.invoke("gimme-connection:room").then((data) => {
             };
             last_message.scrollIntoView(scrollIntoViewOptions);
         });
+
+    const title = document.querySelector("#room-title-text");
+    title.innerHTML = room_data.room_name;
 });
 
 function start(access_token) {
