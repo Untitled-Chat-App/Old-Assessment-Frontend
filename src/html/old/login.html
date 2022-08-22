@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Login</title>
+    <link rel="stylesheet" href="../assets/styles/login.css">
+</head>
+
+<body>
+    <button id="signup-link" onclick="signUpInstead()">Sign Up</button>
+    <img src="../assets/images/logos/nobg_logo_text.png" width="200px" height="auto" class="logo">
+    <div style="height: 15vh;"></div>
+    <div class="login-form">
+        <p id="alert" style="color: red;"></p>
+        <h1>Welcome back!</h1><br>
+        <form>
+            <label for="username">Username:</label><br><br>
+            <input class="text-input" type="text" id="username" autofocus name="username" placeholder="CoolUser" required><br>
+
+            <br>
+
+            <label for="password" align="left">Last name:</label><br><br>
+            <input class="text-input" type="password" id="password" name="password" placeholder="password123"
+                required><br><br>
+
+            <input class="submit-button" type="submit" value="Login">
+
+            <br><br>
+
+
+        </form>
+    </div>
+
+    <script>
+        const { ipcRenderer, Notification } = require("electron");
+
+        const form = document.querySelector("form")
+
+        function submition(event) {
+            event.preventDefault();
+
+            var username = document.querySelector("#username")
+            var password = document.querySelector("#password")
+
+            data = {
+                username: username.value,
+                password: password.value
+            }
+
+            // Reset values
+            username.value = ""
+            password.value = ""
+
+            ipcRenderer.invoke("new-login:login", data).then((data) => {
+                const alertP = document.getElementById("alert")
+                alertP.innerHTML = data
+            });
+
+        }
+
+        form.addEventListener("submit", submition);
+
+        function signUpInstead() {
+            ipcRenderer.send("open-signup:login");
+        }
+    </script>
+</body>
+
+</html>

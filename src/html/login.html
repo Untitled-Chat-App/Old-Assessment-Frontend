@@ -3,68 +3,37 @@
 
 <head>
     <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>Login</title>
+
     <link rel="stylesheet" href="../assets/styles/login.css">
 </head>
 
 <body>
-    <button id="signup-link" onclick="signUpInstead()">Sign Up</button>
-    <img src="../assets/images/logos/nobg_logo_text.png" width="200px" height="auto" class="logo">
-    <div style="height: 15vh;"></div>
-    <div class="login-form">
-        <p id="alert" style="color: red;"></p>
-        <h1>Welcome back!</h1><br>
-        <form>
-            <label for="username">Username:</label><br><br>
-            <input class="text-input" type="text" id="username" autofocus name="username" placeholder="CoolUser" required><br>
+    <div class="main">
+        <div class="login-image-side"><img src="../assets/images/other/eeee.png" alt=""></div>
+        <div class="login-form-side">
+            <h1>Login</h1>
+            <p>Welcome back bro!</p>
 
-            <br>
+            <form>
+                <br>
+                <input class="text-input" type="text" id="username" autofocus name="username"
+                    placeholder="Enter username" required><br>
+                <br><br>
 
-            <label for="password" align="left">Last name:</label><br><br>
-            <input class="text-input" type="password" id="password" name="password" placeholder="password123"
-                required><br><br>
+                <input class="text-input" type="password" id="password" name="password" placeholder="Enter password"
+                    required><br><br>
+                <br>
+                <input class="submit-button" type="submit" value="Login">
+            </form>
 
-            <input class="submit-button" type="submit" value="Login">
-
-            <br><br>
-
-
-        </form>
+            <p>Don't have an account? <a href="">Signup</a></p>
+            <p>Forgot Password? <a href="">Imagine</a></p>
+        </div>
     </div>
-
-    <script>
-        const { ipcRenderer, Notification } = require("electron");
-
-        const form = document.querySelector("form")
-
-        function submition(event) {
-            event.preventDefault();
-
-            var username = document.querySelector("#username")
-            var password = document.querySelector("#password")
-
-            data = {
-                username: username.value,
-                password: password.value
-            }
-
-            // Reset values
-            username.value = ""
-            password.value = ""
-
-            ipcRenderer.invoke("new-login:login", data).then((data) => {
-                const alertP = document.getElementById("alert")
-                alertP.innerHTML = data
-            });
-
-        }
-
-        form.addEventListener("submit", submition);
-
-        function signUpInstead() {
-            ipcRenderer.send("open-signup:login");
-        }
-    </script>
 </body>
 
 </html>

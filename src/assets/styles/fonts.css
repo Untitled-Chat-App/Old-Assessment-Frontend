@@ -6,11 +6,15 @@
 }
 
 @font-face {
-    font-family: "taro";
-    src: url("../fonts/taro.otf");
-}
-
-@font-face {
     font-family: "aileron-light";
     src: url("../fonts/aileron-light.otf");
 }
+/* 
+@font-face {
+    font-family: "Open Sans";
+    font-style: normal;
+    font-weight: 600;
+    src: local("Open Sans Semibold"), local("OpenSans-Semibold"),
+        url(https://fonts.gstatic.com/s/opensans/v13/MTP_ySUJH_bn48VBG8sNSnhCUOGz7vYGh680lGh-uXM.woff)
+            format("woff");
+} */

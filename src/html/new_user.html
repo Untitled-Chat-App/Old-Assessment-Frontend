@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <title>Untitled Chat</title>
+    
+    <link rel="stylesheet" href="../assets/styles/home.css">
+    <script src="https://kit.fontawesome.com/081164e7db.js" crossorigin="anonymous"></script>
+</head>
+
+<body>
+    <div style="height: 25vh;"></div>
+
+    <div class="real-quote">
+        <h1>"Because discord has a <u>skill</u> gap"</h1>
+    </div>
+
+    <div class="im-joking-discord">
+        <h1>Discord please dont kill me that was a joke</h1>
+    </div>
+
+    <div style="height: 3vh;"></div>
+
+    <form id="signup-button" class="sl-button">
+        <button>
+            <span>Login or Sign Up</span>
+        </button>
+    </form>
+    <div style="height: 3vh;"></div>
+    <a id="github" href="https://github.com/Untitled-Chat-App"><i  class="fa-brands fa-github fa-3x"></i></a>
+    <a id="mail" href="mailto:chat@fusionsid.xyz"><i class="fa-solid fa-envelope fa-3x"></i></a>
+
+    <script>
+        const { ipcRenderer } = require("electron");
+
+        const form = document.querySelector("#signup-button")
+
+        function submition(event) {
+            event.preventDefault();
+            ipcRenderer.send("login-or-join:index");
+        }
+
+        form.addEventListener("submit", submition);
+    </script>
+</body>
+
+</html>
